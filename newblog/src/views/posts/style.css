@@ -1,0 +1,343 @@
+.posts-layout {
+  padding: 20px;
+  min-height: calc(100vh - 186px); /* 减去header和footer的高度 */
+  /* 防止布局抖动 */
+  contain: layout style;
+}
+
+.posts-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  /* 防止容器抖动 */
+  contain: layout style;
+}
+
+.posts-header {
+  margin-bottom: 20px;
+  /* 固定头部高度，防止抖动 */
+  min-height: 80px;
+  contain: layout style;
+}
+
+.posts-title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+  /* 防止标题抖动 */
+  min-height: 32px;
+  line-height: 1.2;
+}
+
+.category-filter {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* 固定筛选区域高度，防止抖动 */
+  min-height: 40px;
+  align-items: center;
+  contain: layout style;
+}
+
+.post-card {
+  height: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  /* 防止卡片抖动 */
+  contain: layout style;
+}
+
+/* NGrid 响应式列数控制 */
+.posts-grid {
+  --grid-cols: 3;
+  /* 固定网格容器高度，防止抖动 */
+  min-height: 400px;
+  contain: layout style;
+}
+
+.posts-grid .n-grid {
+  grid-template-columns: repeat(var(--grid-cols), 1fr) !important;
+  /* 防止网格抖动 */
+  contain: layout style;
+}
+
+/* NGrid 项目响应式优化 */
+.n-grid .n-grid-item {
+  min-height: 200px;
+  /* 固定网格项高度，防止抖动 */
+  contain: layout style;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+}
+
+.post-content {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 8px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* 固定内容高度，防止抖动 */
+  min-height: 60px;
+}
+
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #999;
+  /* 固定元信息高度，防止抖动 */
+  min-height: 20px;
+  contain: layout style;
+}
+
+.post-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  /* 固定标题高度，防止抖动 */
+  min-height: 22px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pagination-container {
+  text-align: center;
+  margin-top: 30px;
+  /* 固定分页容器高度，防止抖动 */
+  min-height: 50px;
+  contain: layout style;
+}
+
+/* 加载状态优化 */
+.posts-loading-container {
+  /* 固定加载状态容器高度，防止抖动 */
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  contain: layout style;
+}
+
+/* 空状态优化 */
+.posts-empty-container {
+  /* 固定空状态容器高度，防止抖动 */
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  contain: layout style;
+}
+
+/* 文章卡片内容区域固定高度 */
+.post-card-content {
+  /* 固定卡片内容高度，防止抖动 */
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  contain: layout style;
+}
+
+/* 标签容器固定高度 */
+.post-tags-container {
+  /* 固定标签容器高度，防止抖动 */
+  min-height: 24px;
+  contain: layout style;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .posts-layout {
+    padding: 10px;
+    min-height: calc(100vh - 156px); /* 减去header和footer的高度 */
+  }
+
+  .posts-container {
+    padding: 15px;
+  }
+
+  .posts-header {
+    min-height: 70px;
+  }
+
+  /* 平板端 NGrid 列数 */
+  .posts-grid {
+    --grid-cols: 2;
+    min-height: 350px;
+  }
+
+  /* NGrid 在移动端的优化 */
+  .n-grid .n-grid-item {
+    min-height: 180px;
+  }
+
+  .posts-title {
+    font-size: 20px;
+    text-align: center;
+    min-height: 28px;
+  }
+
+  .category-filter {
+    justify-content: center;
+    min-height: 35px;
+  }
+
+  .post-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-height: 35px;
+  }
+
+  .post-title {
+    font-size: 15px;
+    min-height: 20px;
+  }
+
+  .post-content {
+    font-size: 13px;
+    -webkit-line-clamp: 2;
+    min-height: 40px;
+  }
+
+  .post-card-content {
+    min-height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .posts-layout {
+    padding: 5px;
+    min-height: calc(100vh - 156px); /* 减去header和footer的高度 */
+  }
+
+  .posts-container {
+    padding: 10px;
+  }
+
+  .posts-header {
+    min-height: 60px;
+  }
+
+  /* 手机端 NGrid 列数 */
+  .posts-grid {
+    --grid-cols: 1;
+    min-height: 300px;
+  }
+
+  /* 小屏幕 NGrid 优化 */
+  .n-grid .n-grid-item {
+    min-height: 150px;
+  }
+
+  .posts-title {
+    font-size: 18px;
+    min-height: 24px;
+  }
+
+  .category-filter {
+    flex-direction: column;
+    align-items: center;
+    min-height: 30px;
+  }
+
+  .post-card {
+    margin-bottom: 16px;
+  }
+
+  .post-title {
+    font-size: 14px;
+    min-height: 18px;
+  }
+
+  .post-content {
+    font-size: 12px;
+    margin: 6px 0;
+    min-height: 35px;
+  }
+
+  .post-meta {
+    font-size: 11px;
+    min-height: 30px;
+  }
+
+  .pagination-container {
+    margin-top: 20px;
+    min-height: 40px;
+  }
+
+  .post-card-content {
+    min-height: 80px;
+  }
+}
+
+/* 防抖动优化 */
+.n-spin {
+  /* 防止加载状态抖动 */
+  contain: layout style;
+}
+
+.n-empty {
+  /* 防止空状态抖动 */
+  contain: layout style;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.n-pagination {
+  /* 防止分页组件抖动 */
+  contain: layout style;
+}
+
+.n-card {
+  /* 防止卡片抖动 */
+  contain: layout style;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.n-card .n-card__content {
+  /* 防止卡片内容抖动 */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  contain: layout style;
+}
+
+.n-tag {
+  /* 防止标签抖动 */
+  contain: layout style;
+}
+
+/* 平滑过渡动画 */
+.posts-grid .n-grid-item {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.posts-grid .n-grid-item:hover {
+  transform: translateY(-2px);
+}
+
+/* 加载状态平滑切换 */
+.posts-loading-container,
+.posts-empty-container {
+  transition: opacity 0.3s ease;
+}
+
+/* 防止内容闪烁 */
+.post-card * {
+  contain: layout style;
+}

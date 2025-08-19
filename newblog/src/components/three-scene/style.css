@@ -1,0 +1,10 @@
+.three-scene {
+  position: relative;
+  overflow: hidden;
+}
+
+.three-scene canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

@@ -1,0 +1,724 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>504 - 网关超时</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        max-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+      }
+
+      .error-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 1600px;
+        width: 100%;
+        max-height: 95vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      /* 自定义滚动条样式 */
+      .error-container::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .error-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      .error-container::-webkit-scrollbar-thumb {
+        background: rgba(38, 166, 154, 0.6);
+        border-radius: 3px;
+      }
+
+      .error-container::-webkit-scrollbar-thumb:hover {
+        background: rgba(38, 166, 154, 0.8);
+      }
+
+      .error-code {
+        font-size: 5.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #26a69a 0%, #00695c 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: 0.8rem;
+        text-shadow: 0 0 30px rgba(38, 166, 154, 0.5);
+      }
+
+      .error-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+        color: #fff;
+      }
+
+      .error-description {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+      }
+
+      .error-actions {
+        margin-top: 1rem;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 8px 8px 0;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #4facfe;
+        border: 2px solid #4facfe;
+      }
+
+      .btn-secondary:hover {
+        background: #4facfe;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .error-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+      }
+
+      .timeout-info {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+      }
+
+      .error-info {
+        flex: 0.8;
+        text-align: center;
+        min-width: 280px;
+        max-width: 400px;
+      }
+
+      .game-section {
+        flex: 1.2;
+        min-width: 600px;
+        max-width: 900px;
+      }
+
+      .weiqi-game {
+        margin: 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      .game-layout {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 1.5rem;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: nowrap;
+      }
+
+      .game-board {
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-canvas {
+        width: 420px !important;
+        height: 420px !important;
+        max-width: none;
+        max-height: none;
+      }
+
+      .game-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 200px;
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        font-size: 1rem;
+      }
+
+      .current-player {
+        color: #26a69a;
+        font-weight: 600;
+      }
+
+      .game-winner {
+        color: #4caf50;
+        font-weight: 600;
+      }
+
+      .game-controls {
+        margin: 0.8rem 0;
+      }
+
+      .game-instructions {
+        margin-top: 0.8rem;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .game-instructions p {
+        margin: 0.3rem 0;
+      }
+
+      .btn-game {
+        background: linear-gradient(135deg, #26a69a 0%, #00695c 100%);
+        color: white;
+        border: none;
+        margin: 0 5px;
+      }
+
+      .btn-game:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(38, 166, 154, 0.4);
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 5px;
+        }
+
+        .error-code {
+          font-size: 3.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-title {
+          font-size: 1.3rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-description {
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
+        }
+
+        .error-container {
+          padding: 1.5rem 1rem;
+          max-height: 98vh;
+        }
+
+        .btn {
+          display: block;
+          margin: 8px 0;
+          width: 100%;
+          padding: 12px;
+          font-size: 0.9rem;
+        }
+
+        .weiqi-game {
+          margin: 1rem 0;
+          padding: 0.5rem;
+        }
+
+        .game-canvas {
+          width: 100%;
+          max-width: 340px;
+          height: auto;
+        }
+
+        .game-info {
+          flex-direction: column;
+          gap: 0.3rem;
+          text-align: center;
+          font-size: 0.9rem;
+        }
+
+        .btn-game {
+          font-size: 0.8rem;
+          padding: 6px 12px;
+          margin: 2px 1px;
+          width: calc(33.33% - 2px);
+        }
+      }
+
+      @media (max-height: 600px) {
+        .error-code {
+          font-size: 3rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .error-title {
+          font-size: 1.2rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .error-description {
+          font-size: 0.8rem;
+          margin-bottom: 0.8rem;
+        }
+
+        .error-container {
+          padding: 1rem 0.8rem;
+        }
+
+        .weiqi-game {
+          margin: 0.5rem 0;
+          padding: 0.3rem;
+        }
+
+        .game-canvas {
+          max-width: 280px;
+          height: auto;
+        }
+
+        .btn-game {
+          font-size: 0.7rem;
+          padding: 4px 8px;
+          margin: 1px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .error-container {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .error-info {
+          min-width: auto;
+          text-align: center;
+        }
+
+        .game-section {
+          min-width: auto;
+        }
+
+        .game-layout {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .game-sidebar {
+          min-width: auto;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <!-- 左侧：错误信息和按钮 -->
+      <div class="error-info">
+        <div class="error-icon">⏰</div>
+        <div class="error-code">504</div>
+        <h1 class="error-title">网关超时</h1>
+        <p class="error-description">
+          服务器作为网关或代理时，没有及时从上游服务器收到请求。不过，来玩个围棋游戏放松一下吧！
+        </p>
+
+        <div class="timeout-info">
+          <p>如果问题持续，请联系：18955628948@163.com</p>
+        </div>
+
+        <div class="error-actions">
+          <a href="/" class="btn btn-primary">返回首页</a>
+          <a href="javascript:location.reload()" class="btn btn-secondary">重新加载</a>
+        </div>
+      </div>
+
+      <!-- 右侧：小游戏 -->
+      <div class="game-section">
+        <div class="weiqi-game">
+          <div class="game-layout">
+            <div class="game-board">
+              <canvas id="weiqiCanvas" class="game-canvas" width="420" height="420"></canvas>
+            </div>
+
+            <div class="game-sidebar">
+              <div class="game-info">
+                <span class="current-player"
+                  >当前玩家: <span id="weiqi-current-player" style="color: #000">●黑子</span></span
+                >
+                <span id="weiqi-winner" class="game-winner" style="display: none"></span>
+              </div>
+
+              <div class="game-controls">
+                <button id="weiqiStartBtn" class="btn btn-game">开始游戏</button>
+                <button id="weiqiPassBtn" class="btn btn-game">弃权</button>
+                <button id="weiqiResetBtn" class="btn btn-game">重置棋盘</button>
+              </div>
+
+              <div class="game-instructions">
+                <p>点击交叉点下子</p>
+                <p>黑子先手，白子后手</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 围棋游戏逻辑
+      const canvas = document.getElementById('weiqiCanvas')
+      const ctx = canvas.getContext('2d')
+      const currentPlayerElement = document.getElementById('weiqi-current-player')
+      const winnerElement = document.getElementById('weiqi-winner')
+      const startBtn = document.getElementById('weiqiStartBtn')
+      const passBtn = document.getElementById('weiqiPassBtn')
+      const resetBtn = document.getElementById('weiqiResetBtn')
+
+      const BOARD_SIZE = 13 // 简化为13x13棋盘
+      const CELL_SIZE = 30
+      const BOARD_OFFSET = 25
+
+      let board = Array(BOARD_SIZE)
+        .fill()
+        .map(() => Array(BOARD_SIZE).fill(0))
+      let currentPlayer = 1 // 1: 黑子, 2: 白子
+      let gameStarted = false
+      let gameOver = false
+      let passCount = 0
+
+      function drawBoard() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // 绘制背景
+        ctx.fillStyle = '#deb887'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+        // 绘制网格线
+        ctx.strokeStyle = '#000'
+        ctx.lineWidth = 1
+
+        for (let i = 0; i < BOARD_SIZE; i++) {
+          // 垂直线
+          ctx.beginPath()
+          ctx.moveTo(BOARD_OFFSET + i * CELL_SIZE, BOARD_OFFSET)
+          ctx.lineTo(BOARD_OFFSET + i * CELL_SIZE, BOARD_OFFSET + (BOARD_SIZE - 1) * CELL_SIZE)
+          ctx.stroke()
+
+          // 水平线
+          ctx.beginPath()
+          ctx.moveTo(BOARD_OFFSET, BOARD_OFFSET + i * CELL_SIZE)
+          ctx.lineTo(BOARD_OFFSET + (BOARD_SIZE - 1) * CELL_SIZE, BOARD_OFFSET + i * CELL_SIZE)
+          ctx.stroke()
+        }
+
+        // 绘制星位（天元等标记点）
+        const starPoints = [
+          [3, 3],
+          [3, 9],
+          [9, 3],
+          [9, 9],
+          [6, 6],
+        ]
+
+        ctx.fillStyle = '#000'
+        starPoints.forEach(([x, y]) => {
+          if (x < BOARD_SIZE && y < BOARD_SIZE) {
+            ctx.beginPath()
+            ctx.arc(BOARD_OFFSET + x * CELL_SIZE, BOARD_OFFSET + y * CELL_SIZE, 3, 0, 2 * Math.PI)
+            ctx.fill()
+          }
+        })
+
+        // 绘制棋子
+        for (let row = 0; row < BOARD_SIZE; row++) {
+          for (let col = 0; col < BOARD_SIZE; col++) {
+            if (board[row][col] !== 0) {
+              drawStone(col, row, board[row][col])
+            }
+          }
+        }
+      }
+
+      function drawStone(col, row, player) {
+        const x = BOARD_OFFSET + col * CELL_SIZE
+        const y = BOARD_OFFSET + row * CELL_SIZE
+        const radius = CELL_SIZE / 2 - 2
+
+        ctx.beginPath()
+        ctx.arc(x, y, radius, 0, 2 * Math.PI)
+
+        if (player === 1) {
+          // 黑子
+          ctx.fillStyle = '#000'
+          ctx.fill()
+        } else {
+          // 白子
+          ctx.fillStyle = '#fff'
+          ctx.fill()
+          ctx.strokeStyle = '#000'
+          ctx.lineWidth = 2
+          ctx.stroke()
+        }
+      }
+
+      function getBoardPosition(event) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+
+        const col = Math.round((x - BOARD_OFFSET) / CELL_SIZE)
+        const row = Math.round((y - BOARD_OFFSET) / CELL_SIZE)
+
+        return { row, col }
+      }
+
+      function isValidMove(row, col) {
+        return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE && board[row][col] === 0
+      }
+
+      function hasLiberty(row, col, player, visited = new Set()) {
+        const key = `${row},${col}`
+        if (visited.has(key)) return false
+        visited.add(key)
+
+        const directions = [
+          [0, 1],
+          [1, 0],
+          [0, -1],
+          [-1, 0],
+        ]
+
+        for (let [dr, dc] of directions) {
+          const newRow = row + dr
+          const newCol = col + dc
+
+          if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {
+            if (board[newRow][newCol] === 0) {
+              return true // 找到气
+            } else if (board[newRow][newCol] === player) {
+              if (hasLiberty(newRow, newCol, player, visited)) {
+                return true
+              }
+            }
+          }
+        }
+
+        return false
+      }
+
+      function captureStones(row, col, opponent) {
+        const directions = [
+          [0, 1],
+          [1, 0],
+          [0, -1],
+          [-1, 0],
+        ]
+        let captured = 0
+
+        for (let [dr, dc] of directions) {
+          const newRow = row + dr
+          const newCol = col + dc
+
+          if (
+            newRow >= 0 &&
+            newRow < BOARD_SIZE &&
+            newCol >= 0 &&
+            newCol < BOARD_SIZE &&
+            board[newRow][newCol] === opponent
+          ) {
+            if (!hasLiberty(newRow, newCol, opponent)) {
+              // 提取这个棋子和相连的同色棋子
+              captured += removeGroup(newRow, newCol, opponent)
+            }
+          }
+        }
+
+        return captured
+      }
+
+      function removeGroup(row, col, player) {
+        if (
+          row < 0 ||
+          row >= BOARD_SIZE ||
+          col < 0 ||
+          col >= BOARD_SIZE ||
+          board[row][col] !== player
+        ) {
+          return 0
+        }
+
+        board[row][col] = 0
+        let count = 1
+
+        const directions = [
+          [0, 1],
+          [1, 0],
+          [0, -1],
+          [-1, 0],
+        ]
+        for (let [dr, dc] of directions) {
+          count += removeGroup(row + dr, col + dc, player)
+        }
+
+        return count
+      }
+
+      function makeMove(row, col) {
+        if (!gameStarted || gameOver || !isValidMove(row, col)) {
+          return
+        }
+
+        board[row][col] = currentPlayer
+        const opponent = currentPlayer === 1 ? 2 : 1
+
+        // 检查是否吃掉对方棋子
+        const captured = captureStones(row, col, opponent)
+
+        // 检查自杀（简化规则：不允许自杀）
+        if (!hasLiberty(row, col, currentPlayer)) {
+          if (captured === 0) {
+            board[row][col] = 0 // 撤销自杀走法
+            return
+          }
+        }
+
+        passCount = 0 // 重置弃权计数
+
+        // 简单胜利判断：吃掉足够多的棋子
+        if (captured > 5) {
+          winnerElement.textContent = `${currentPlayer === 1 ? '黑子' : '白子'}获胜！`
+          winnerElement.style.display = 'inline'
+          gameOver = true
+          drawBoard()
+          return
+        }
+
+        // 切换玩家
+        currentPlayer = currentPlayer === 1 ? 2 : 1
+        updateCurrentPlayer()
+        drawBoard()
+      }
+
+      function updateCurrentPlayer() {
+        if (currentPlayer === 1) {
+          currentPlayerElement.innerHTML = '●黑子'
+          currentPlayerElement.style.color = '#000'
+        } else {
+          currentPlayerElement.innerHTML = '●白子'
+          currentPlayerElement.style.color = '#fff'
+        }
+      }
+
+      function startGame() {
+        gameStarted = true
+        gameOver = false
+        currentPlayer = 1
+        passCount = 0
+        winnerElement.style.display = 'none'
+        updateCurrentPlayer()
+        startBtn.textContent = '游戏进行中'
+        startBtn.disabled = true
+        passBtn.disabled = false
+      }
+
+      function passMove() {
+        if (!gameStarted || gameOver) return
+
+        passCount++
+
+        if (passCount >= 2) {
+          // 双方都弃权，游戏结束
+          winnerElement.textContent = '双方弃权，游戏结束！'
+          winnerElement.style.display = 'inline'
+          gameOver = true
+          passBtn.disabled = true
+          return
+        }
+
+        // 切换玩家
+        currentPlayer = currentPlayer === 1 ? 2 : 1
+        updateCurrentPlayer()
+      }
+
+      function resetGame() {
+        board = Array(BOARD_SIZE)
+          .fill()
+          .map(() => Array(BOARD_SIZE).fill(0))
+        currentPlayer = 1
+        gameStarted = false
+        gameOver = false
+        passCount = 0
+        winnerElement.style.display = 'none'
+        updateCurrentPlayer()
+        drawBoard()
+        startBtn.textContent = '开始游戏'
+        startBtn.disabled = false
+        passBtn.disabled = true
+      }
+
+      // 事件监听器
+      canvas.addEventListener('click', (event) => {
+        const { row, col } = getBoardPosition(event)
+        makeMove(row, col)
+      })
+
+      startBtn.addEventListener('click', startGame)
+      passBtn.addEventListener('click', passMove)
+      resetBtn.addEventListener('click', resetGame)
+
+      // 初始化
+      drawBoard()
+      updateCurrentPlayer()
+      passBtn.disabled = true
+    </script>
+  </body>
+</html>

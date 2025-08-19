@@ -1,0 +1,44 @@
+/* 文章骨架屏样式 */
+.post-skeleton {
+  padding: 16px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.skeleton-tags {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.skeleton-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .post-skeleton {
+    padding: 12px;
+  }
+
+  .skeleton-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-skeleton {
+    padding: 10px;
+  }
+
+  .skeleton-tags {
+    gap: 6px;
+  }
+}

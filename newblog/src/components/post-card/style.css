@@ -1,0 +1,176 @@
+/* 文章卡片组件样式 */
+.post-card {
+  height: 100%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  /* 防止卡片抖动 */
+  contain: layout style;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+}
+
+.post-card .n-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* 防止卡片抖动 */
+  contain: layout style;
+}
+
+.post-card .n-card .n-card__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* 防止卡片内容抖动 */
+  contain: layout style;
+}
+
+.post-card-header {
+  /* 固定头部高度，防止抖动 */
+  min-height: 22px;
+  contain: layout style;
+}
+
+.post-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+  /* 固定标题高度，防止抖动 */
+  min-height: 22px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* 防止标题抖动 */
+  contain: layout style;
+}
+
+.post-card-content {
+  /* 固定卡片内容高度，防止抖动 */
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* 防止内容抖动 */
+  contain: layout style;
+}
+
+.post-content {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 8px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  /* 固定内容高度，防止抖动 */
+  min-height: 60px;
+  /* 防止内容抖动 */
+  contain: layout style;
+}
+
+.post-tags-container {
+  /* 固定标签容器高度，防止抖动 */
+  min-height: 24px;
+  margin: 8px 0;
+  /* 防止标签抖动 */
+  contain: layout style;
+}
+
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #999;
+  /* 固定元信息高度，防止抖动 */
+  min-height: 20px;
+  /* 防止元信息抖动 */
+  contain: layout style;
+}
+
+.post-date {
+  /* 防止日期抖动 */
+  contain: layout style;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .post-title {
+    font-size: 15px;
+    min-height: 20px;
+  }
+
+  .post-content {
+    font-size: 13px;
+    -webkit-line-clamp: 2;
+    min-height: 40px;
+  }
+
+  .post-card-content {
+    min-height: 100px;
+  }
+
+  .post-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-height: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .post-title {
+    font-size: 14px;
+    min-height: 18px;
+  }
+
+  .post-content {
+    font-size: 12px;
+    margin: 6px 0;
+    min-height: 35px;
+  }
+
+  .post-meta {
+    font-size: 11px;
+    min-height: 30px;
+  }
+
+  .post-card-content {
+    min-height: 80px;
+  }
+}
+
+/* 平滑过渡动画 */
+.post-card {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-2px);
+}
+
+/* 防止内容闪烁 */
+.post-card * {
+  contain: layout style;
+}
+
+/* 标签样式优化 */
+.post-tags-container .n-tag {
+  /* 防止标签抖动 */
+  contain: layout style;
+}
+
+/* 卡片阴影优化 */
+.post-card .n-card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.post-card:hover .n-card {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}

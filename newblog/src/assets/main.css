@@ -1,0 +1,223 @@
+@import './base.css';
+@import './transitions.css';
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  /* 防止页面抖动 */
+  contain: layout style;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* 防止页面抖动 */
+  contain: layout style;
+}
+
+.app-header {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--color-background-soft);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  /* 固定头部，防止抖动 */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  padding: 1rem;
+  /* 防止内容抖动 */
+  contain: layout style;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+/* 页面切换动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* 移动端布局 */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0.75rem;
+  }
+
+  .app-main {
+    padding: 0.75rem;
+  }
+}
+
+/* 平板布局 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .app-header {
+    padding: 1rem;
+  }
+
+  .app-main {
+    padding: 1rem;
+  }
+}
+
+/* 桌面布局 */
+@media (min-width: 1025px) {
+  .app-container {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .app-header {
+    padding: 1.25rem;
+  }
+
+  .app-main {
+    padding: 1.25rem;
+  }
+}
+
+/* 大屏布局 */
+@media (min-width: 1441px) {
+  .app-container {
+    max-width: 1920px;
+  }
+
+  .app-header {
+    padding: 1.5rem;
+  }
+
+  .app-main {
+    padding: 1.5rem;
+  }
+}
+
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* 兼容 Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+
+/* 防抖动优化 */
+.n-layout-header {
+  /* 确保头部高度固定 */
+  height: 64px !important;
+  min-height: 64px;
+  max-height: 64px;
+  /* 防止头部抖动 */
+  contain: layout style;
+}
+
+.n-layout-content {
+  /* 确保内容区域稳定 */
+  min-height: calc(100vh - 64px - 60px);
+  /* 防止内容抖动 */
+  contain: layout style;
+}
+
+.n-layout-footer {
+  /* 确保底部高度固定 */
+  height: 60px !important;
+  min-height: 60px;
+  max-height: 60px;
+  /* 防止底部抖动 */
+  contain: layout style;
+}
+
+/* 组件防抖动 */
+.n-card,
+.n-button,
+.n-input,
+.n-spin,
+.n-pagination,
+.n-tag,
+.n-empty {
+  /* 防止组件抖动 */
+  contain: layout style;
+}
+
+/* 音乐播放器防抖动 */
+.music-player-container {
+  /* 防止音乐播放器抖动 */
+  contain: layout style;
+  position: fixed;
+  z-index: 9999;
+}
+
+/* 响应式防抖动 */
+@media (max-width: 768px) {
+  .n-layout-header {
+    height: 64px !important;
+  }
+
+  .n-layout-content {
+    min-height: calc(100vh - 64px - 60px);
+  }
+
+  .n-layout-footer {
+    height: 60px !important;
+  }
+}

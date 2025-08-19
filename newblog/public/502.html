@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>502 - 网关错误</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        max-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+      }
+
+      .error-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 1600px;
+        width: 100%;
+        max-height: 95vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      /* 自定义滚动条样式 */
+      .error-container::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .error-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      .error-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 167, 38, 0.6);
+        border-radius: 3px;
+      }
+
+      .error-container::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 167, 38, 0.8);
+      }
+
+      .error-code {
+        font-size: 5.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: 0.8rem;
+        text-shadow: 0 0 30px rgba(255, 167, 38, 0.5);
+      }
+
+      .error-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+        color: #fff;
+      }
+
+      .error-description {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+      }
+
+      .error-actions {
+        margin-top: 1rem;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 8px 8px 0;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #4facfe;
+        border: 2px solid #4facfe;
+      }
+
+      .btn-secondary:hover {
+        background: #4facfe;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .error-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+      }
+
+      .error-info {
+        flex: 0.8;
+        text-align: center;
+        min-width: 280px;
+        max-width: 400px;
+      }
+
+      .game-section {
+        flex: 1.2;
+        min-width: 600px;
+        max-width: 900px;
+      }
+
+      .gomoku-game {
+        margin: 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      .game-layout {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 1.5rem;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: nowrap;
+      }
+
+      .game-board {
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-canvas {
+        width: 450px !important;
+        height: 450px !important;
+        max-width: none;
+        max-height: none;
+      }
+
+      .game-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 200px;
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .current-player {
+        color: #ffa726;
+        font-weight: 600;
+      }
+
+      .game-winner {
+        color: #4caf50;
+        font-weight: 600;
+      }
+
+      .game-controls {
+        margin: 0.5rem 0;
+      }
+
+      .game-instructions {
+        margin-top: 0.5rem;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .game-instructions p {
+        margin: 0.3rem 0;
+      }
+
+      .btn-game {
+        background: linear-gradient(135deg, #ffa726 0%, #ff7043 100%);
+        color: white;
+        border: none;
+        margin: 0 5px;
+      }
+
+      .btn-game:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 167, 38, 0.4);
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 5px;
+        }
+
+        .error-code {
+          font-size: 3.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-title {
+          font-size: 1.3rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-description {
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
+        }
+
+        .error-container {
+          padding: 1rem 0.8rem;
+          max-height: 99vh;
+        }
+
+        .btn {
+          display: block;
+          margin: 8px 0;
+          width: 100%;
+          padding: 12px;
+          font-size: 0.9rem;
+        }
+
+        .gomoku-game {
+          margin: 1rem 0;
+          padding: 0.5rem;
+        }
+
+        .game-canvas {
+          width: 100%;
+          max-width: 320px;
+          height: auto;
+        }
+
+        .game-info {
+          flex-direction: column;
+          gap: 0.3rem;
+          text-align: center;
+          font-size: 0.9rem;
+        }
+
+        .btn-game {
+          font-size: 0.8rem;
+          padding: 8px 16px;
+          margin: 3px 0;
+          width: 100%;
+        }
+      }
+
+      /* 默认就是横向布局，只需要调整具体尺寸 */
+
+      @media (max-height: 600px) {
+        .error-code {
+          font-size: 3rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .error-title {
+          font-size: 1.2rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .error-description {
+          font-size: 0.8rem;
+          margin-bottom: 0.8rem;
+        }
+
+        .error-container {
+          padding: 1rem 0.8rem;
+        }
+
+        .gomoku-game {
+          margin: 0.5rem 0;
+          padding: 0.3rem;
+        }
+
+        .game-canvas {
+          width: 300px;
+          height: 300px;
+        }
+
+        .game-sidebar {
+          min-width: 160px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .game-layout {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .game-sidebar {
+          min-width: auto;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <!-- 左侧：错误信息和按钮 -->
+      <div class="error-info">
+        <div class="error-icon">🔌</div>
+        <div class="error-code">502</div>
+        <h1 class="error-title">网关错误</h1>
+        <p class="error-description">
+          服务器作为网关或代理时，从上游服务器收到无效响应。不过，来玩个五子棋游戏放松一下吧！
+        </p>
+
+        <div class="error-actions">
+          <a href="/" class="btn btn-primary">返回首页</a>
+          <a href="javascript:location.reload()" class="btn btn-secondary">重新加载</a>
+        </div>
+      </div>
+
+      <!-- 右侧：小游戏 -->
+      <div class="game-section">
+        <div class="gomoku-game">
+          <div class="game-layout">
+            <div class="game-board">
+              <canvas id="gomokuCanvas" class="game-canvas" width="450" height="450"></canvas>
+            </div>
+
+            <div class="game-sidebar">
+              <div class="game-info">
+                <span class="current-player"
+                  >当前玩家: <span id="current-player" style="color: #000">●黑子</span></span
+                >
+                <span id="gomoku-winner" class="game-winner" style="display: none"></span>
+              </div>
+
+              <div class="game-controls">
+                <button id="gomokuStartBtn" class="btn btn-game">开始游戏</button>
+                <button id="gomokuResetBtn" class="btn btn-game">重置棋盘</button>
+              </div>
+
+              <div class="game-instructions">
+                <p>点击棋盘下子，五子连线获胜</p>
+                <p>黑子先手，白子后手</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 五子棋游戏逻辑
+      const canvas = document.getElementById('gomokuCanvas')
+      const ctx = canvas.getContext('2d')
+      const currentPlayerElement = document.getElementById('current-player')
+      const winnerElement = document.getElementById('gomoku-winner')
+      const startBtn = document.getElementById('gomokuStartBtn')
+      const resetBtn = document.getElementById('gomokuResetBtn')
+
+      const BOARD_SIZE = 15
+      const CELL_SIZE = 28
+      const BOARD_OFFSET = 20
+
+      let board = Array(BOARD_SIZE)
+        .fill()
+        .map(() => Array(BOARD_SIZE).fill(0))
+      let currentPlayer = 1 // 1: 黑子, 2: 白子
+      let gameStarted = false
+      let gameOver = false
+
+      function drawBoard() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // 绘制背景
+        ctx.fillStyle = '#deb887'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+        // 绘制网格线
+        ctx.strokeStyle = '#000'
+        ctx.lineWidth = 1
+
+        for (let i = 0; i < BOARD_SIZE; i++) {
+          // 垂直线
+          ctx.beginPath()
+          ctx.moveTo(BOARD_OFFSET + i * CELL_SIZE, BOARD_OFFSET)
+          ctx.lineTo(BOARD_OFFSET + i * CELL_SIZE, BOARD_OFFSET + (BOARD_SIZE - 1) * CELL_SIZE)
+          ctx.stroke()
+
+          // 水平线
+          ctx.beginPath()
+          ctx.moveTo(BOARD_OFFSET, BOARD_OFFSET + i * CELL_SIZE)
+          ctx.lineTo(BOARD_OFFSET + (BOARD_SIZE - 1) * CELL_SIZE, BOARD_OFFSET + i * CELL_SIZE)
+          ctx.stroke()
+        }
+
+        // 绘制棋子
+        for (let row = 0; row < BOARD_SIZE; row++) {
+          for (let col = 0; col < BOARD_SIZE; col++) {
+            if (board[row][col] !== 0) {
+              drawPiece(col, row, board[row][col])
+            }
+          }
+        }
+      }
+
+      function drawPiece(col, row, player) {
+        const x = BOARD_OFFSET + col * CELL_SIZE
+        const y = BOARD_OFFSET + row * CELL_SIZE
+        const radius = CELL_SIZE / 2 - 2
+
+        ctx.beginPath()
+        ctx.arc(x, y, radius, 0, 2 * Math.PI)
+
+        if (player === 1) {
+          ctx.fillStyle = '#000'
+        } else {
+          ctx.fillStyle = '#fff'
+          ctx.strokeStyle = '#000'
+          ctx.lineWidth = 2
+        }
+
+        ctx.fill()
+        if (player === 2) {
+          ctx.stroke()
+        }
+      }
+
+      function getBoardPosition(event) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+
+        const col = Math.round((x - BOARD_OFFSET) / CELL_SIZE)
+        const row = Math.round((y - BOARD_OFFSET) / CELL_SIZE)
+
+        return { row, col }
+      }
+
+      function isValidMove(row, col) {
+        return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE && board[row][col] === 0
+      }
+
+      function checkWin(row, col, player) {
+        const directions = [
+          [0, 1], // 水平
+          [1, 0], // 垂直
+          [1, 1], // 对角线 \
+          [1, -1], // 对角线 /
+        ]
+
+        for (let [dx, dy] of directions) {
+          let count = 1
+
+          // 向一个方向计数
+          for (let i = 1; i < 5; i++) {
+            const newRow = row + i * dx
+            const newCol = col + i * dy
+            if (
+              newRow >= 0 &&
+              newRow < BOARD_SIZE &&
+              newCol >= 0 &&
+              newCol < BOARD_SIZE &&
+              board[newRow][newCol] === player
+            ) {
+              count++
+            } else {
+              break
+            }
+          }
+
+          // 向相反方向计数
+          for (let i = 1; i < 5; i++) {
+            const newRow = row - i * dx
+            const newCol = col - i * dy
+            if (
+              newRow >= 0 &&
+              newRow < BOARD_SIZE &&
+              newCol >= 0 &&
+              newCol < BOARD_SIZE &&
+              board[newRow][newCol] === player
+            ) {
+              count++
+            } else {
+              break
+            }
+          }
+
+          if (count >= 5) {
+            return true
+          }
+        }
+
+        return false
+      }
+
+      function makeMove(row, col) {
+        if (!gameStarted || gameOver || !isValidMove(row, col)) {
+          return
+        }
+
+        board[row][col] = currentPlayer
+        drawBoard()
+
+        if (checkWin(row, col, currentPlayer)) {
+          const playerName = currentPlayer === 1 ? '黑子' : '白子'
+          winnerElement.textContent = `${playerName}获胜！`
+          winnerElement.style.display = 'inline'
+          gameOver = true
+          return
+        }
+
+        // 检查平局
+        let isFull = true
+        for (let r = 0; r < BOARD_SIZE; r++) {
+          for (let c = 0; c < BOARD_SIZE; c++) {
+            if (board[r][c] === 0) {
+              isFull = false
+              break
+            }
+          }
+          if (!isFull) break
+        }
+
+        if (isFull) {
+          winnerElement.textContent = '平局！'
+          winnerElement.style.display = 'inline'
+          gameOver = true
+          return
+        }
+
+        // 切换玩家
+        currentPlayer = currentPlayer === 1 ? 2 : 1
+        updateCurrentPlayer()
+      }
+
+      function updateCurrentPlayer() {
+        if (currentPlayer === 1) {
+          currentPlayerElement.innerHTML = '●黑子'
+          currentPlayerElement.style.color = '#000'
+        } else {
+          currentPlayerElement.innerHTML = '●白子'
+          currentPlayerElement.style.color = '#fff'
+        }
+      }
+
+      function startGame() {
+        gameStarted = true
+        gameOver = false
+        currentPlayer = 1
+        winnerElement.style.display = 'none'
+        updateCurrentPlayer()
+        startBtn.textContent = '游戏进行中'
+        startBtn.disabled = true
+      }
+
+      function resetGame() {
+        board = Array(BOARD_SIZE)
+          .fill()
+          .map(() => Array(BOARD_SIZE).fill(0))
+        currentPlayer = 1
+        gameStarted = false
+        gameOver = false
+        winnerElement.style.display = 'none'
+        updateCurrentPlayer()
+        drawBoard()
+        startBtn.textContent = '开始游戏'
+        startBtn.disabled = false
+      }
+
+      // 事件监听器
+      canvas.addEventListener('click', (event) => {
+        const { row, col } = getBoardPosition(event)
+        makeMove(row, col)
+      })
+
+      startBtn.addEventListener('click', startGame)
+      resetBtn.addEventListener('click', resetGame)
+
+      // 初始化
+      drawBoard()
+      updateCurrentPlayer()
+    </script>
+  </body>
+</html>

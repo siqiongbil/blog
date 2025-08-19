@@ -1,0 +1,8 @@
+# ads.txt file for siqiongbiluo.love
+# Advertising transparency file
+# Currently no advertising partnerships
+# For advertising inquiries, please contact: 18955628948@163.com
+
+# Format example:
+# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+# More information: https://iabtechlab.com/ads-txt/ 

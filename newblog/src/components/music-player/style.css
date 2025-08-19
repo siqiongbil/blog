@@ -1,0 +1,450 @@
+.music-player-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.music-player {
+  position: absolute;
+  width: 320px;
+  pointer-events: all;
+  transition:
+    transform 0.1s ease-out,
+    box-shadow 0.2s ease;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.music-player.dragging {
+  transform: scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2) !important;
+  cursor: grabbing;
+}
+
+.music-player.minimized {
+  width: 280px;
+}
+
+.player-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.player-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: grab;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+}
+
+.player-header:active {
+  cursor: grabbing;
+}
+
+.song-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.song-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.song-artist {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+}
+
+.player-body {
+  padding: 16px;
+}
+
+.progress-section {
+  margin-bottom: 16px;
+}
+
+.time-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: #666;
+}
+
+.controls-section {
+  margin-bottom: 16px;
+}
+
+.bottom-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  max-width: 120px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .music-player {
+    width: 340px;
+    max-width: calc(100vw - 20px);
+    /* 在平板端也需要考虑Footer空间 */
+    bottom: 70px !important;
+  }
+
+  .music-player.minimized {
+    width: 300px;
+    max-width: calc(100vw - 20px);
+    bottom: 70px !important;
+  }
+
+  .player-header {
+    padding: 12px 16px;
+  }
+
+  .player-body {
+    padding: 16px;
+  }
+
+  .song-title {
+    font-size: 15px;
+  }
+
+  .song-artist {
+    font-size: 13px;
+  }
+
+  /* 增大按钮尺寸 */
+  .header-controls .n-button {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .controls-section .n-button {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .controls-section .n-button--circle {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  /* 增大滑块触摸区域 */
+  .progress-section .n-slider {
+    height: 20px !important;
+  }
+
+  .volume-control .n-slider {
+    height: 16px !important;
+  }
+
+  /* 时间显示更大 */
+  .time-display {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .music-player {
+    width: calc(100vw - 16px);
+    max-width: 360px;
+    /* 在小屏幕上固定在底部，但留出空间给Footer */
+    position: fixed !important;
+    bottom: 80px !important; /* 增加底部距离，为Footer留出空间 */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    top: auto !important;
+    z-index: 1000; /* 确保在Footer之上 */
+  }
+
+  .music-player.minimized {
+    width: calc(100vw - 16px);
+    max-width: 320px;
+    bottom: 80px !important; /* 最小化时也保持相同的底部距离 */
+  }
+
+  .player-header {
+    padding: 14px 18px;
+  }
+
+  .player-body {
+    padding: 18px;
+  }
+
+  .song-title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .song-artist {
+    font-size: 14px;
+  }
+
+  /* 更大的按钮 */
+  .header-controls .n-button {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .controls-section .n-button {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .controls-section .n-button--circle {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  /* 更大的滑块 */
+  .progress-section .n-slider {
+    height: 24px !important;
+  }
+
+  .progress-section .n-slider .n-slider-handle {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .volume-control .n-slider {
+    height: 20px !important;
+  }
+
+  /* 更大的时间显示 */
+  .time-display {
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+
+  /* 控制区域间距 */
+  .controls-section {
+    margin-bottom: 20px;
+  }
+
+  .progress-section {
+    margin-bottom: 20px;
+  }
+
+  /* 音量控制区域优化 */
+  .volume-control {
+    max-width: 140px;
+  }
+
+  /* 播放列表弹出层在移动端的优化 */
+  .music-player-popover .n-popover__content {
+    max-height: 50vh !important;
+    width: calc(100vw - 32px) !important;
+    max-width: 320px !important;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+  .music-player {
+    width: calc(100vw - 12px);
+    bottom: 80px !important; /* 保持与480px一致的底部距离 */
+  }
+
+  .music-player.minimized {
+    width: calc(100vw - 12px);
+    bottom: 80px !important;
+  }
+
+  .player-header {
+    padding: 12px 14px;
+  }
+
+  .player-body {
+    padding: 14px;
+  }
+
+  .song-title {
+    font-size: 15px;
+  }
+
+  .song-artist {
+    font-size: 13px;
+  }
+
+  .controls-section .n-button--circle {
+    width: 52px !important;
+    height: 52px !important;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .music-player {
+    /* 禁用悬停效果 */
+  }
+
+  .player-card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  /* 增加触摸目标大小 */
+  .n-button {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+
+  /* 滑块触摸优化 */
+  .n-slider .n-slider-handle {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .progress-section .n-slider {
+    padding: 10px 0 !important;
+  }
+
+  .volume-control .n-slider {
+    padding: 8px 0 !important;
+  }
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.music-player {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 播放按钮动画 */
+.n-button--circle.n-button--primary {
+  animation: pulse 2s infinite;
+}
+
+.n-button--circle.n-button--primary:hover {
+  animation: none;
+}
+
+/* 音乐列表弹出层样式 */
+.music-player-popover {
+  z-index: 10000 !important;
+}
+
+.music-player .n-popover {
+  z-index: 10000 !important;
+}
+
+/* 自定义滚动条 */
+.n-popover .n-scrollbar-rail {
+  right: 2px;
+}
+
+.n-popover .n-scrollbar-rail .n-scrollbar-handle {
+  background: rgba(99, 102, 241, 0.3);
+}
+
+.n-popover .n-scrollbar-rail .n-scrollbar-handle:hover {
+  background: rgba(99, 102, 241, 0.5);
+}
+
+/* 播放器卡片悬停效果 */
+.player-card:hover {
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* 最小化状态下的特殊样式 */
+.music-player.minimized .player-header {
+  padding: 8px 12px;
+}
+
+.music-player.minimized .song-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.music-player.minimized .song-title {
+  font-size: 13px;
+}
+
+.music-player.minimized .song-artist {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* 拖拽时的视觉反馈 */
+.music-player.dragging .player-card {
+  background: rgba(255, 255, 255, 0.98);
+  border: 2px solid rgba(99, 102, 241, 0.3);
+}
+
+/* 音量滑块样式优化 */
+.volume-control .n-slider {
+  margin-left: 8px;
+}
+
+/* 播放列表项样式 */
+.n-list-item:hover {
+  background-color: rgba(99, 102, 241, 0.05) !important;
+}
+
+/* 进度条样式优化 */
+.progress-section .n-slider .n-slider-handle {
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.progress-section .n-slider .n-slider-rail {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.progress-section .n-slider .n-slider-fill {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+}

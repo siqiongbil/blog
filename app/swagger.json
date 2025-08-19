@@ -1,0 +1,260 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "个人博客系统 API",
+    "description": "个人博客系统的完整REST API文档，支持用户管理、文章发布、分类管理、音乐分享和系统配置等功能。",
+    "version": "1.0.0",
+    "contact": {
+      "name": "博客管理员",
+      "email": "admin@example.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9000/api",
+      "description": "本地开发环境"
+    },
+    {
+      "url": "https://yourdomain.com/api",
+      "description": "生产环境"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "JWT认证，请在请求头中添加：Authorization: Bearer {token}"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "用户ID" },
+          "username": { "type": "string", "description": "用户名" },
+          "nickname": { "type": "string", "description": "昵称" },
+          "email": { "type": "string", "format": "email", "description": "邮箱" },
+          "avatar": { "type": "string", "description": "头像URL", "nullable": true },
+          "role": { "type": "integer", "description": "用户角色：1-管理员，2-博主，3-普通用户", "enum": [1, 2, 3] },
+          "created_at": { "type": "string", "format": "date-time", "description": "创建时间" }
+        }
+      },
+      "Article": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "文章ID" },
+          "title": { "type": "string", "description": "文章标题" },
+          "content": { "type": "string", "description": "文章内容" },
+          "summary": { "type": "string", "description": "文章摘要", "nullable": true },
+          "cover_image": { "type": "string", "description": "封面图片URL", "nullable": true },
+          "category_id": { "type": "integer", "description": "分类ID", "nullable": true },
+          "author_id": { "type": "integer", "description": "作者ID" },
+          "status": { "type": "integer", "description": "文章状态：1-草稿，2-已发布，3-已删除", "enum": [1, 2, 3] },
+          "view_count": { "type": "integer", "description": "浏览次数", "default": 0 },
+          "created_at": { "type": "string", "format": "date-time", "description": "创建时间" }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "分类ID" },
+          "name": { "type": "string", "description": "分类名称" },
+          "slug": { "type": "string", "description": "分类别名（用于URL）" },
+          "description": { "type": "string", "description": "分类描述", "nullable": true },
+          "image_url": { "type": "string", "description": "分类图片URL", "nullable": true },
+          "sort_order": { "type": "integer", "description": "排序顺序", "default": 0 },
+          "created_at": { "type": "string", "format": "date-time", "description": "创建时间" }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "标签ID" },
+          "name": { "type": "string", "description": "标签名称" },
+          "slug": { "type": "string", "description": "标签别名（用于URL）" },
+          "description": { "type": "string", "description": "标签描述", "nullable": true },
+          "color": { "type": "string", "description": "标签颜色（十六进制格式）", "default": "#007bff" },
+          "created_at": { "type": "string", "format": "date-time", "description": "创建时间" }
+        }
+      },
+      "Music": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "音乐ID" },
+          "title": { "type": "string", "description": "音乐标题" },
+          "artist": { "type": "string", "description": "艺术家", "nullable": true },
+          "file_path": { "type": "string", "description": "文件路径" },
+          "file_url": { "type": "string", "description": "文件URL" },
+          "duration": { "type": "integer", "description": "时长（秒）", "nullable": true },
+          "play_count": { "type": "integer", "description": "播放次数", "default": 0 },
+          "is_enabled": { "type": "boolean", "description": "是否启用", "default": true },
+          "created_at": { "type": "string", "format": "date-time", "description": "创建时间" }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": true },
+          "message": { "type": "string", "example": "操作成功" },
+          "data": { "type": "object", "description": "响应数据" }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "message": { "type": "string", "example": "操作失败" },
+          "error": { "type": "string", "description": "错误详情" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": ["系统信息"],
+        "summary": "API健康检查",
+        "responses": {
+          "200": {
+            "description": "服务正常",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SuccessResponse" } } }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["用户管理"],
+        "summary": "用户登录",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "登录成功" },
+          "401": { "description": "登录失败" }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": ["用户管理"],
+        "summary": "获取当前用户信息",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "获取成功" },
+          "401": { "description": "未授权" }
+        }
+      }
+    },
+    "/articles": {
+      "get": {
+        "tags": ["文章管理"],
+        "summary": "获取文章列表",
+        "parameters": [
+          { "in": "query", "name": "page", "schema": { "type": "integer", "minimum": 1, "default": 1 } },
+          { "in": "query", "name": "pageSize", "schema": { "type": "integer", "minimum": 1, "maximum": 100, "default": 10 } },
+          { "in": "query", "name": "category", "schema": { "type": "integer" } },
+          { "in": "query", "name": "status", "schema": { "type": "integer", "enum": [1, 2, 3] } }
+        ],
+        "responses": {
+          "200": { "description": "获取成功" }
+        }
+      },
+      "post": {
+        "tags": ["文章管理"],
+        "summary": "创建文章",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "content"],
+                "properties": {
+                  "title": { "type": "string" },
+                  "content": { "type": "string" },
+                  "summary": { "type": "string" },
+                  "category_id": { "type": "integer" },
+                  "status": { "type": "integer", "enum": [1, 2], "default": 1 }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "创建成功" },
+          "400": { "description": "请求参数错误" },
+          "401": { "description": "未授权" }
+        }
+      }
+    },
+    "/articles/{id}": {
+      "get": {
+        "tags": ["文章管理"],
+        "summary": "获取文章详情",
+        "parameters": [
+          { "in": "path", "name": "id", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "200": { "description": "获取成功" },
+          "404": { "description": "文章不存在" }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "tags": ["分类管理"],
+        "summary": "获取分类列表",
+        "responses": {
+          "200": { "description": "获取成功" }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "tags": ["标签管理"],
+        "summary": "获取标签列表",
+        "responses": {
+          "200": { "description": "获取成功" }
+        }
+      }
+    },
+    "/music/enabled": {
+      "get": {
+        "tags": ["音乐管理"],
+        "summary": "获取启用的音乐列表",
+        "responses": {
+          "200": { "description": "获取成功" }
+        }
+      }
+    },
+    "/system-config/blog": {
+      "get": {
+        "tags": ["系统配置"],
+        "summary": "获取博客配置",
+        "responses": {
+          "200": { "description": "获取成功" }
+        }
+      }
+    }
+  }
+}

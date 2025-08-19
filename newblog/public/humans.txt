@@ -1,0 +1,28 @@
+/* TEAM */
+    Developer: 似琼碧落
+    Contact: 18955628948 [at] 163.com
+    Twitter: @siqiongbiluo
+    From: 中国
+
+/* THANKS */
+    感谢所有开源项目的贡献者
+    Vue.js, TypeScript, Vite, Nginx
+
+/* SITE */
+    Last update: 2024/12/27
+    Language: 中文 / English
+    Doctype: HTML5
+    IDE: Cursor, Visual Studio Code
+    Components: Vue 3, TypeScript, Pinia
+    Styling: CSS3, Responsive Design
+
+/* LOCATION */
+    中国
+
+    　　　　　　　　　　　　　∩　　∩
+    　　　　　　　　　　　　（　　　 ）
+    　　　　　　　　　　　 /　　　　　|　似琼碧落的博客
+    　　　　　　　　　　　/　　　　　 |　技术分享 · 学习记录
+    　　　　　　　　　　 （　　　　　 ）
+    　　　　　　　　　　　 |　　　　　|
+    　　　　　　　　　　　 |　　　　　| 

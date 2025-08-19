@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>500 - 服务器内部错误</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        max-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+      }
+
+      .error-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 1600px;
+        width: 100%;
+        max-height: 95vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      /* 自定义滚动条样式 */
+      .error-container::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .error-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      .error-container::-webkit-scrollbar-thumb {
+        background: rgba(255, 107, 107, 0.6);
+        border-radius: 3px;
+      }
+
+      .error-container::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 107, 107, 0.8);
+      }
+
+      .error-code {
+        font-size: 5.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: 0.8rem;
+        text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
+      }
+
+      .error-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+        color: #fff;
+      }
+
+      .error-description {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+      }
+
+      .error-actions {
+        margin-top: 1rem;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 8px 8px 0;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #4facfe;
+        border: 2px solid #4facfe;
+      }
+
+      .btn-secondary:hover {
+        background: #4facfe;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .error-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+      }
+
+      .error-info {
+        flex: 0.8;
+        text-align: center;
+        min-width: 280px;
+        max-width: 400px;
+      }
+
+      .game-section {
+        flex: 1.2;
+        min-width: 450px;
+        max-width: 700px;
+      }
+
+      .tetris-game {
+        margin: 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      .game-layout {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 1.5rem;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: nowrap;
+        max-height: 480px !important;
+        overflow: hidden;
+      }
+
+      .game-board {
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-canvas {
+        max-height: 320px !important;
+        max-width: 200px !important;
+        width: 200px !important;
+        height: 320px !important;
+        object-fit: contain;
+      }
+
+      .game-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 200px;
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        font-size: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .score,
+      .level {
+        color: #ff6b6b;
+        font-weight: 600;
+      }
+
+      .game-controls {
+        margin: 0.8rem 0;
+      }
+
+      .game-instructions {
+        margin-top: 0.8rem;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .game-instructions p {
+        margin: 0.3rem 0;
+      }
+
+      .btn-game {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        color: white;
+        border: none;
+        margin: 0 5px;
+      }
+
+      .btn-game:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 5px;
+        }
+
+        .error-code {
+          font-size: 3.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-title {
+          font-size: 1.3rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-description {
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
+        }
+
+        .error-container {
+          padding: 1.5rem 1rem;
+          max-height: 98vh;
+        }
+
+        .btn {
+          display: block;
+          margin: 8px 0;
+          width: 100%;
+          padding: 12px;
+          font-size: 0.9rem;
+        }
+
+        .tetris-game {
+          margin: 1rem 0;
+          padding: 0.5rem;
+        }
+
+        .game-canvas {
+          width: 100%;
+          max-width: 280px;
+          height: auto;
+        }
+
+        .game-info {
+          flex-direction: column;
+          gap: 0.3rem;
+          text-align: center;
+          font-size: 0.9rem;
+        }
+
+        .btn-game {
+          font-size: 0.8rem;
+          padding: 8px 16px;
+          margin: 3px 0;
+          width: 100%;
+        }
+      }
+
+      /* 默认就是横向布局，只需要调整具体尺寸 */
+
+      @media (max-height: 600px) {
+        .error-code {
+          font-size: 3rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .error-title {
+          font-size: 1.2rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .error-description {
+          font-size: 0.8rem;
+          margin-bottom: 0.8rem;
+        }
+
+        .error-container {
+          padding: 1rem 0.8rem;
+        }
+
+        .tetris-game {
+          margin: 0.5rem 0;
+          padding: 0.3rem;
+        }
+
+        .game-canvas {
+          width: 200px;
+          height: 400px;
+        }
+
+        .game-sidebar {
+          min-width: 160px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .error-container {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .error-info {
+          min-width: auto;
+          text-align: center;
+        }
+
+        .game-section {
+          min-width: auto;
+        }
+
+        .game-layout {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .game-sidebar {
+          min-width: auto;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <!-- 左侧：错误信息和按钮 -->
+      <div class="error-info">
+        <div class="error-icon">⚠️</div>
+        <div class="error-code">500</div>
+        <h1 class="error-title">服务器内部错误</h1>
+        <p class="error-description">
+          抱歉，服务器遇到了一个内部错误，无法完成您的请求。不过，来玩个俄罗斯方块游戏放松一下吧！
+        </p>
+
+        <div class="error-actions">
+          <a href="/" class="btn btn-primary">返回首页</a>
+          <a href="javascript:history.back()" class="btn btn-secondary">返回上页</a>
+        </div>
+      </div>
+
+      <!-- 右侧：小游戏 -->
+      <div class="game-section">
+        <div class="tetris-game">
+          <div class="game-layout">
+            <div class="game-board">
+              <canvas id="tetrisCanvas" class="game-canvas" width="200" height="320"></canvas>
+            </div>
+
+            <div class="game-sidebar">
+              <div class="game-info">
+                <span class="score">得分: <span id="tetris-score">0</span></span>
+                <span class="level">等级: <span id="tetris-level">1</span></span>
+                <span id="tetris-game-over" class="game-over" style="display: none">游戏结束</span>
+              </div>
+
+              <div class="game-controls">
+                <button id="tetrisStartBtn" class="btn btn-game">开始游戏</button>
+                <button id="tetrisPauseBtn" class="btn btn-game" style="display: none">暂停</button>
+              </div>
+
+              <div class="game-instructions">
+                <p>方向键移动和旋转方块</p>
+                <p>空格键快速下降</p>
+                <p>P键暂停/继续游戏</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 俄罗斯方块游戏逻辑
+      const canvas = document.getElementById('tetrisCanvas')
+      const ctx = canvas.getContext('2d')
+      const scoreElement = document.getElementById('tetris-score')
+      const levelElement = document.getElementById('tetris-level')
+      const gameOverElement = document.getElementById('tetris-game-over')
+      const startBtn = document.getElementById('tetrisStartBtn')
+      const pauseBtn = document.getElementById('tetrisPauseBtn')
+
+      const BLOCK_SIZE = 20
+      const BOARD_WIDTH = 10
+      const BOARD_HEIGHT = 16
+
+      let board = Array(BOARD_HEIGHT)
+        .fill()
+        .map(() => Array(BOARD_WIDTH).fill(0))
+      let score = 0
+      let level = 1
+      let gameRunning = false
+      let gameOver = false
+      let gameInterval = null
+      let currentPiece = null
+
+      // 方块形状定义
+      const pieces = [
+        [[1, 1, 1, 1]], // I
+        [
+          [1, 1],
+          [1, 1],
+        ], // O
+        [
+          [0, 1, 0],
+          [1, 1, 1],
+        ], // T
+        [
+          [0, 1, 1],
+          [1, 1, 0],
+        ], // S
+        [
+          [1, 1, 0],
+          [0, 1, 1],
+        ], // Z
+        [
+          [1, 0, 0],
+          [1, 1, 1],
+        ], // J
+        [
+          [0, 0, 1],
+          [1, 1, 1],
+        ], // L
+      ]
+
+      const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8']
+
+      function drawBlock(x, y, color) {
+        ctx.fillStyle = color
+        ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE - 1, BLOCK_SIZE - 1)
+      }
+
+      function drawBoard() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+        for (let y = 0; y < BOARD_HEIGHT; y++) {
+          for (let x = 0; x < BOARD_WIDTH; x++) {
+            if (board[y][x]) {
+              drawBlock(x, y, colors[board[y][x] - 1])
+            }
+          }
+        }
+      }
+
+      function createPiece() {
+        const typeId = Math.floor(Math.random() * pieces.length)
+        return {
+          shape: pieces[typeId],
+          x: Math.floor(BOARD_WIDTH / 2) - Math.floor(pieces[typeId][0].length / 2),
+          y: 0,
+          color: typeId + 1,
+        }
+      }
+
+      function drawPiece(piece) {
+        piece.shape.forEach((row, y) => {
+          row.forEach((value, x) => {
+            if (value) {
+              drawBlock(piece.x + x, piece.y + y, colors[piece.color - 1])
+            }
+          })
+        })
+      }
+
+      function canMove(piece, dx, dy, newShape) {
+        const shape = newShape || piece.shape
+        const newX = piece.x + dx
+        const newY = piece.y + dy
+
+        for (let y = 0; y < shape.length; y++) {
+          for (let x = 0; x < shape[y].length; x++) {
+            if (shape[y][x]) {
+              const boardX = newX + x
+              const boardY = newY + y
+
+              if (
+                boardX < 0 ||
+                boardX >= BOARD_WIDTH ||
+                boardY >= BOARD_HEIGHT ||
+                (boardY >= 0 && board[boardY][boardX])
+              ) {
+                return false
+              }
+            }
+          }
+        }
+        return true
+      }
+
+      function placePiece(piece) {
+        piece.shape.forEach((row, y) => {
+          row.forEach((value, x) => {
+            if (value) {
+              board[piece.y + y][piece.x + x] = piece.color
+            }
+          })
+        })
+      }
+
+      function clearLines() {
+        let linesCleared = 0
+        for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
+          if (board[y].every((cell) => cell !== 0)) {
+            board.splice(y, 1)
+            board.unshift(Array(BOARD_WIDTH).fill(0))
+            linesCleared++
+            y++ // 检查同一行
+          }
+        }
+
+        if (linesCleared > 0) {
+          score += linesCleared * 100 * level
+          scoreElement.textContent = score
+
+          const newLevel = Math.floor(score / 1000) + 1
+          if (newLevel !== level) {
+            level = newLevel
+            levelElement.textContent = level
+            clearInterval(gameInterval)
+            gameInterval = setInterval(gameLoop, Math.max(50, 500 - level * 50))
+          }
+        }
+      }
+
+      function rotatePiece(piece) {
+        const newShape = piece.shape[0].map((_, i) => piece.shape.map((row) => row[i]).reverse())
+        if (canMove(piece, 0, 0, newShape)) {
+          piece.shape = newShape
+        }
+      }
+
+      function gameLoop() {
+        if (!gameRunning) return
+
+        if (canMove(currentPiece, 0, 1)) {
+          currentPiece.y++
+        } else {
+          placePiece(currentPiece)
+          clearLines()
+          currentPiece = createPiece()
+
+          if (!canMove(currentPiece, 0, 0)) {
+            gameOver = true
+            gameRunning = false
+            gameOverElement.style.display = 'inline'
+            startBtn.textContent = '重新开始'
+            startBtn.style.display = 'inline-block'
+            pauseBtn.style.display = 'none'
+            return
+          }
+        }
+
+        drawBoard()
+        drawPiece(currentPiece)
+      }
+
+      function startGame() {
+        board = Array(BOARD_HEIGHT)
+          .fill()
+          .map(() => Array(BOARD_WIDTH).fill(0))
+        score = 0
+        level = 1
+        scoreElement.textContent = score
+        levelElement.textContent = level
+        gameOver = false
+        gameRunning = true
+        gameOverElement.style.display = 'none'
+        currentPiece = createPiece()
+
+        if (gameInterval) clearInterval(gameInterval)
+        gameInterval = setInterval(gameLoop, 500)
+
+        startBtn.style.display = 'none'
+        pauseBtn.style.display = 'inline-block'
+        pauseBtn.textContent = '暂停'
+      }
+
+      function toggleGame() {
+        if (gameOver) {
+          startGame()
+          return
+        }
+
+        gameRunning = !gameRunning
+        pauseBtn.textContent = gameRunning ? '暂停' : '继续'
+      }
+
+      function handleKeyPress(event) {
+        if (!gameRunning || !currentPiece) return
+
+        switch (event.key) {
+          case 'ArrowLeft':
+            if (canMove(currentPiece, -1, 0)) {
+              currentPiece.x--
+              drawBoard()
+              drawPiece(currentPiece)
+            }
+            break
+          case 'ArrowRight':
+            if (canMove(currentPiece, 1, 0)) {
+              currentPiece.x++
+              drawBoard()
+              drawPiece(currentPiece)
+            }
+            break
+          case 'ArrowDown':
+            if (canMove(currentPiece, 0, 1)) {
+              currentPiece.y++
+              drawBoard()
+              drawPiece(currentPiece)
+            }
+            break
+          case 'ArrowUp':
+            rotatePiece(currentPiece)
+            drawBoard()
+            drawPiece(currentPiece)
+            break
+          case ' ':
+            event.preventDefault()
+            while (canMove(currentPiece, 0, 1)) {
+              currentPiece.y++
+            }
+            drawBoard()
+            drawPiece(currentPiece)
+            break
+          case 'p':
+          case 'P':
+            event.preventDefault()
+            toggleGame()
+            break
+        }
+      }
+
+      // 事件监听器
+      startBtn.addEventListener('click', startGame)
+      pauseBtn.addEventListener('click', toggleGame)
+      document.addEventListener('keydown', handleKeyPress)
+
+      // 初始化
+      drawBoard()
+    </script>
+  </body>
+</html>

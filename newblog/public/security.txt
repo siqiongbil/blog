@@ -1,0 +1,12 @@
+Contact: mailto:18955628948@163.com
+Expires: 2025-12-31T23:59:59.000Z
+Encryption: https://siqiongbiluo.love/pgp-key.asc
+Preferred-Languages: zh-CN, en
+Canonical: https://siqiongbiluo.love/.well-known/security.txt
+Policy: https://siqiongbiluo.love/security-policy
+Acknowledgments: https://siqiongbiluo.love/security-acknowledgments
+
+# 安全报告指南
+# 如果您发现安全漏洞，请通过上述联系方式报告
+# 我们承诺在收到报告后48小时内回复
+# 请不要公开披露，直到我们修复问题 

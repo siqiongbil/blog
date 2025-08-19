@@ -1,0 +1,231 @@
+.home-layout {
+  padding: 20px;
+  min-height: calc(100vh - 186px); /* 减去header和footer的高度 */
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* NGrid 响应式列数控制 */
+.home-grid {
+  --grid-cols: 4;
+}
+
+.n-grid {
+  grid-template-columns: repeat(var(--grid-cols), 1fr) !important;
+}
+
+/* NGrid 项目响应式优化 */
+.n-grid .n-grid-item {
+  min-height: 220px;
+}
+
+.home {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-section {
+  text-align: center;
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px;
+  margin-bottom: 3rem;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.hero-cta {
+  display: inline-flex;
+  gap: 1rem;
+}
+
+.btn-primary {
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid white;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: white;
+  color: #667eea;
+}
+
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.feature-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.feature-description {
+  color: #666;
+  line-height: 1.6;
+}
+
+.green {
+  height: 108px;
+  background-color: rgba(0, 128, 0, 0.24);
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .home-layout {
+    padding: 15px;
+    min-height: calc(100vh - 156px); /* 减去header和footer的高度 */
+  }
+
+  .search-container {
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  /* 平板端 NGrid 列数 */
+  .home-grid {
+    --grid-cols: 2;
+  }
+
+  /* 移动端 NGrid 优化 */
+  .n-grid .n-grid-item {
+    min-height: 200px;
+  }
+
+  .home {
+    padding: 1rem;
+  }
+
+  .hero-section {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-primary {
+    padding: 0.75rem 1.5rem;
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .features-section {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .feature-card {
+    padding: 1.5rem;
+  }
+
+  .feature-icon {
+    font-size: 2.5rem;
+  }
+
+  .feature-title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-layout {
+    padding: 10px;
+    min-height: calc(100vh - 156px); /* 减去header和footer的高度 */
+  }
+
+  .search-container {
+    padding: 0 5px;
+    gap: 6px;
+  }
+
+  /* 手机端 NGrid 列数 */
+  .home-grid {
+    --grid-cols: 1;
+  }
+
+  /* 小屏幕 NGrid 优化 */
+  .n-grid .n-grid-item {
+    min-height: 180px;
+  }
+
+  .home {
+    padding: 0.5rem;
+  }
+
+  .hero-section {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .feature-card {
+    padding: 1rem;
+  }
+}

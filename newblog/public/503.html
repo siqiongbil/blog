@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>503 - 服务不可用</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        max-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        margin: 0;
+        padding: 10px;
+        overflow: hidden;
+      }
+
+      .error-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 1600px;
+        width: 100%;
+        max-height: 95vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+        box-sizing: border-box;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      /* 自定义滚动条样式 */
+      .error-container::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .error-container::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      .error-container::-webkit-scrollbar-thumb {
+        background: rgba(171, 71, 188, 0.6);
+        border-radius: 3px;
+      }
+
+      .error-container::-webkit-scrollbar-thumb:hover {
+        background: rgba(171, 71, 188, 0.8);
+      }
+
+      .error-code {
+        font-size: 5.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #ab47bc 0%, #8e24aa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: 0.8rem;
+        text-shadow: 0 0 30px rgba(171, 71, 188, 0.5);
+      }
+
+      .error-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+        color: #fff;
+      }
+
+      .error-description {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+      }
+
+      .error-actions {
+        margin-top: 1rem;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 8px 8px 0;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #4facfe;
+        border: 2px solid #4facfe;
+      }
+
+      .btn-secondary:hover {
+        background: #4facfe;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .error-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+      }
+
+      .maintenance-info {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1rem;
+        border-radius: 10px;
+        margin: 1rem 0;
+        font-size: 0.9rem;
+      }
+
+      .error-info {
+        flex: 0.8;
+        text-align: center;
+        min-width: 280px;
+        max-width: 400px;
+      }
+
+      .game-section {
+        flex: 1.2;
+        min-width: 600px;
+        max-width: 900px;
+      }
+
+      .chess-game {
+        margin: 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      .game-layout {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 1.5rem;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: nowrap;
+      }
+
+      .game-board {
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-canvas {
+        width: 460px !important;
+        height: 500px !important;
+        max-width: none;
+        max-height: none;
+      }
+
+      .game-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 200px;
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        font-size: 1rem;
+      }
+
+      .current-player {
+        color: #ab47bc;
+        font-weight: 600;
+      }
+
+      .game-winner {
+        color: #4caf50;
+        font-weight: 600;
+      }
+
+      .game-controls {
+        margin: 0.8rem 0;
+      }
+
+      .game-instructions {
+        margin-top: 0.8rem;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .game-instructions p {
+        margin: 0.3rem 0;
+      }
+
+      .btn-game {
+        background: linear-gradient(135deg, #ab47bc 0%, #8e24aa 100%);
+        color: white;
+        border: none;
+        margin: 0 5px;
+      }
+
+      .btn-game:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(171, 71, 188, 0.4);
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 5px;
+        }
+
+        .error-code {
+          font-size: 3.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-title {
+          font-size: 1.3rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-description {
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
+        }
+
+        .error-container {
+          padding: 1.5rem 1rem;
+          max-height: 98vh;
+        }
+
+        .btn {
+          display: block;
+          margin: 8px 0;
+          width: 100%;
+          padding: 12px;
+          font-size: 0.9rem;
+        }
+
+        .chess-game {
+          margin: 1rem 0;
+          padding: 0.5rem;
+        }
+
+        .game-canvas {
+          width: 100%;
+          max-width: 360px;
+          height: auto;
+        }
+
+        .game-info {
+          flex-direction: column;
+          gap: 0.3rem;
+          text-align: center;
+          font-size: 0.9rem;
+        }
+
+        .btn-game {
+          font-size: 0.8rem;
+          padding: 8px 16px;
+          margin: 3px 0;
+          width: 100%;
+        }
+      }
+
+      @media (max-height: 600px) {
+        .error-code {
+          font-size: 3rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .error-title {
+          font-size: 1.2rem;
+          margin-bottom: 0.3rem;
+        }
+
+        .error-description {
+          font-size: 0.8rem;
+          margin-bottom: 0.8rem;
+        }
+
+        .error-container {
+          padding: 1rem 0.8rem;
+        }
+
+        .chess-game {
+          margin: 0.5rem 0;
+          padding: 0.3rem;
+        }
+
+        .game-canvas {
+          max-width: 300px;
+          height: auto;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .error-container {
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .error-info {
+          min-width: auto;
+          text-align: center;
+        }
+
+        .game-section {
+          min-width: auto;
+        }
+
+        .game-layout {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .game-sidebar {
+          min-width: auto;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <!-- 左侧：错误信息和按钮 -->
+      <div class="error-info">
+        <div class="error-icon">🔧</div>
+        <div class="error-code">503</div>
+        <h1 class="error-title">服务不可用</h1>
+        <p class="error-description">
+          服务器当前无法处理请求。这可能是由于系统维护或服务器过载造成的临时状况。不过，来玩个象棋游戏放松一下吧！
+        </p>
+
+        <div class="maintenance-info">
+          <p>
+            如果问题持续存在，请联系我们：<br />
+            📧 18955628948@163.com
+          </p>
+        </div>
+
+        <div class="error-actions">
+          <a href="/" class="btn btn-primary">返回首页</a>
+          <a href="javascript:location.reload()" class="btn btn-secondary">重新加载</a>
+        </div>
+      </div>
+
+      <!-- 右侧：小游戏 -->
+      <div class="game-section">
+        <div class="chess-game">
+          <div class="game-layout">
+            <div class="game-board">
+              <canvas id="chessCanvas" class="game-canvas" width="460" height="500"></canvas>
+            </div>
+
+            <div class="game-sidebar">
+              <div class="game-info">
+                <span class="current-player"
+                  >当前玩家:
+                  <span id="chess-current-player" style="color: #ff5722">红方</span></span
+                >
+                <span id="chess-winner" class="game-winner" style="display: none"></span>
+              </div>
+
+              <div class="game-controls">
+                <button id="chessStartBtn" class="btn btn-game">开始游戏</button>
+                <button id="chessResetBtn" class="btn btn-game">重置棋盘</button>
+              </div>
+
+              <div class="game-instructions">
+                <p>点击棋子选择，再点击目标位置移动</p>
+                <p>红方先手，黑方后手</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 简化象棋游戏逻辑
+      const canvas = document.getElementById('chessCanvas')
+      const ctx = canvas.getContext('2d')
+      const currentPlayerElement = document.getElementById('chess-current-player')
+      const winnerElement = document.getElementById('chess-winner')
+      const startBtn = document.getElementById('chessStartBtn')
+      const resetBtn = document.getElementById('chessResetBtn')
+
+      const CELL_SIZE = 46
+      const BOARD_OFFSET = 25
+      let currentPlayer = 1 // 1: 红方, 2: 黑方
+      let gameStarted = false
+      let selectedPiece = null
+
+      // 棋子类型定义
+      const PIECES = {
+        EMPTY: 0,
+        // 红方 (1-7)
+        R_KING: 1, // 帅
+        R_GUARD: 2, // 仕
+        R_ELEPHANT: 3, // 相
+        R_HORSE: 4, // 马
+        R_ROOK: 5, // 车
+        R_CANNON: 6, // 炮
+        R_PAWN: 7, // 兵
+        // 黑方 (8-14)
+        B_KING: 8, // 将
+        B_GUARD: 9, // 士
+        B_ELEPHANT: 10, // 象
+        B_HORSE: 11, // 马
+        B_ROOK: 12, // 车
+        B_CANNON: 13, // 炮
+        B_PAWN: 14, // 卒
+      }
+
+      // 棋子名称
+      const PIECE_NAMES = {
+        1: '帅',
+        2: '仕',
+        3: '相',
+        4: '马',
+        5: '车',
+        6: '炮',
+        7: '兵',
+        8: '将',
+        9: '士',
+        10: '象',
+        11: '马',
+        12: '车',
+        13: '炮',
+        14: '卒',
+      }
+
+      // 标准象棋开局棋盘
+      let board = [
+        [12, 11, 10, 9, 8, 9, 10, 11, 12],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 13, 0, 0, 0, 0, 0, 13, 0],
+        [14, 0, 14, 0, 14, 0, 14, 0, 14],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [7, 0, 7, 0, 7, 0, 7, 0, 7],
+        [0, 6, 0, 0, 0, 0, 0, 6, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [5, 4, 3, 2, 1, 2, 3, 4, 5],
+      ]
+
+      function drawBoard() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // 绘制背景
+        ctx.fillStyle = '#deb887'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+        // 绘制网格线
+        ctx.strokeStyle = '#000'
+        ctx.lineWidth = 2
+
+        for (let i = 0; i < 9; i++) {
+          // 垂直线
+          ctx.beginPath()
+          ctx.moveTo(BOARD_OFFSET + i * CELL_SIZE, BOARD_OFFSET)
+          ctx.lineTo(BOARD_OFFSET + i * CELL_SIZE, BOARD_OFFSET + 9 * CELL_SIZE)
+          ctx.stroke()
+        }
+
+        for (let i = 0; i < 10; i++) {
+          // 水平线
+          ctx.beginPath()
+          ctx.moveTo(BOARD_OFFSET, BOARD_OFFSET + i * CELL_SIZE)
+          ctx.lineTo(BOARD_OFFSET + 8 * CELL_SIZE, BOARD_OFFSET + i * CELL_SIZE)
+          ctx.stroke()
+        }
+
+        // 绘制楚河汉界
+        ctx.fillStyle = '#000'
+        ctx.font = '16px Arial'
+        ctx.textAlign = 'center'
+        ctx.fillText('楚河', BOARD_OFFSET + 2 * CELL_SIZE, BOARD_OFFSET + 4.7 * CELL_SIZE)
+        ctx.fillText('汉界', BOARD_OFFSET + 6 * CELL_SIZE, BOARD_OFFSET + 4.7 * CELL_SIZE)
+
+        // 绘制棋子
+        for (let row = 0; row < 10; row++) {
+          for (let col = 0; col < 9; col++) {
+            if (board[row][col] !== 0) {
+              drawPiece(col, row, board[row][col])
+            }
+          }
+        }
+
+        // 绘制选中棋子的高亮
+        if (selectedPiece) {
+          ctx.strokeStyle = '#ff0'
+          ctx.lineWidth = 3
+          ctx.beginPath()
+          const x = BOARD_OFFSET + selectedPiece.col * CELL_SIZE
+          const y = BOARD_OFFSET + selectedPiece.row * CELL_SIZE
+          ctx.arc(x, y, 18, 0, 2 * Math.PI)
+          ctx.stroke()
+        }
+      }
+
+      function drawPiece(col, row, piece) {
+        const x = BOARD_OFFSET + col * CELL_SIZE
+        const y = BOARD_OFFSET + row * CELL_SIZE
+        const radius = 18
+
+        // 判断红方还是黑方
+        const isRed = piece >= 1 && piece <= 7
+
+        // 绘制棋子圆圈
+        ctx.beginPath()
+        ctx.arc(x, y, radius, 0, 2 * Math.PI)
+        ctx.fillStyle = isRed ? '#ff5722' : '#333'
+        ctx.fill()
+        ctx.strokeStyle = '#000'
+        ctx.lineWidth = 2
+        ctx.stroke()
+
+        // 绘制棋子文字
+        ctx.fillStyle = '#fff'
+        ctx.font = 'bold 14px Arial'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(PIECE_NAMES[piece] || '?', x, y)
+      }
+
+      function getBoardPosition(event) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+
+        const col = Math.round((x - BOARD_OFFSET) / CELL_SIZE)
+        const row = Math.round((y - BOARD_OFFSET) / CELL_SIZE)
+
+        return { row, col }
+      }
+
+      function isValidPosition(row, col) {
+        return row >= 0 && row < 10 && col >= 0 && col < 9
+      }
+
+      function isRedPiece(piece) {
+        return piece >= 1 && piece <= 7
+      }
+
+      function isBlackPiece(piece) {
+        return piece >= 8 && piece <= 14
+      }
+
+      function isSameTeam(piece1, piece2) {
+        return (
+          (isRedPiece(piece1) && isRedPiece(piece2)) ||
+          (isBlackPiece(piece1) && isBlackPiece(piece2))
+        )
+      }
+
+      function isValidMove(fromRow, fromCol, toRow, toCol) {
+        if (!isValidPosition(toRow, toCol)) return false
+
+        const piece = board[fromRow][fromCol]
+        const target = board[toRow][toCol]
+
+        // 不能吃自己的棋子
+        if (target !== 0 && isSameTeam(piece, target)) return false
+
+        const rowDiff = Math.abs(toRow - fromRow)
+        const colDiff = Math.abs(toCol - fromCol)
+
+        switch (piece) {
+          case PIECES.R_KING:
+          case PIECES.B_KING:
+            return isValidKingMove(fromRow, fromCol, toRow, toCol)
+
+          case PIECES.R_GUARD:
+          case PIECES.B_GUARD:
+            return isValidGuardMove(fromRow, fromCol, toRow, toCol)
+
+          case PIECES.R_ELEPHANT:
+          case PIECES.B_ELEPHANT:
+            return isValidElephantMove(fromRow, fromCol, toRow, toCol)
+
+          case PIECES.R_HORSE:
+          case PIECES.B_HORSE:
+            return isValidHorseMove(fromRow, fromCol, toRow, toCol)
+
+          case PIECES.R_ROOK:
+          case PIECES.B_ROOK:
+            return isValidRookMove(fromRow, fromCol, toRow, toCol)
+
+          case PIECES.R_CANNON:
+          case PIECES.B_CANNON:
+            return isValidCannonMove(fromRow, fromCol, toRow, toCol)
+
+          case PIECES.R_PAWN:
+          case PIECES.B_PAWN:
+            return isValidPawnMove(fromRow, fromCol, toRow, toCol)
+
+          default:
+            return false
+        }
+      }
+
+      function isValidKingMove(fromRow, fromCol, toRow, toCol) {
+        const rowDiff = Math.abs(toRow - fromRow)
+        const colDiff = Math.abs(toCol - fromCol)
+
+        // 帅/将只能在九宫格内移动
+        const piece = board[fromRow][fromCol]
+        const isRed = isRedPiece(piece)
+
+        if (isRed) {
+          // 红方九宫格 (7-9行, 3-5列)
+          if (toRow < 7 || toRow > 9 || toCol < 3 || toCol > 5) return false
+        } else {
+          // 黑方九宫格 (0-2行, 3-5列)
+          if (toRow < 0 || toRow > 2 || toCol < 3 || toCol > 5) return false
+        }
+
+        // 只能走一格
+        return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)
+      }
+
+      function isValidGuardMove(fromRow, fromCol, toRow, toCol) {
+        const rowDiff = Math.abs(toRow - fromRow)
+        const colDiff = Math.abs(toCol - fromCol)
+
+        // 仕/士只能在九宫格内斜着走
+        const piece = board[fromRow][fromCol]
+        const isRed = isRedPiece(piece)
+
+        if (isRed) {
+          if (toRow < 7 || toRow > 9 || toCol < 3 || toCol > 5) return false
+        } else {
+          if (toRow < 0 || toRow > 2 || toCol < 3 || toCol > 5) return false
+        }
+
+        return rowDiff === 1 && colDiff === 1
+      }
+
+      function isValidElephantMove(fromRow, fromCol, toRow, toCol) {
+        const rowDiff = toRow - fromRow
+        const colDiff = toCol - fromCol
+
+        // 相/象走"田"字，不能过河
+        if (Math.abs(rowDiff) !== 2 || Math.abs(colDiff) !== 2) return false
+
+        const piece = board[fromRow][fromCol]
+        const isRed = isRedPiece(piece)
+
+        if (isRed && toRow < 5) return false // 红相不能过河
+        if (!isRed && toRow > 4) return false // 黑象不能过河
+
+        // 检查塞象眼
+        const blockRow = fromRow + rowDiff / 2
+        const blockCol = fromCol + colDiff / 2
+        return board[blockRow][blockCol] === 0
+      }
+
+      function isValidHorseMove(fromRow, fromCol, toRow, toCol) {
+        const rowDiff = Math.abs(toRow - fromRow)
+        const colDiff = Math.abs(toCol - fromCol)
+
+        // 马走"日"字
+        if (!((rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2))) {
+          return false
+        }
+
+        // 检查蹩马腿
+        let blockRow, blockCol
+        if (rowDiff === 2) {
+          blockRow = fromRow + (toRow > fromRow ? 1 : -1)
+          blockCol = fromCol
+        } else {
+          blockRow = fromRow
+          blockCol = fromCol + (toCol > fromCol ? 1 : -1)
+        }
+
+        return board[blockRow][blockCol] === 0
+      }
+
+      function isValidRookMove(fromRow, fromCol, toRow, toCol) {
+        // 车走直线
+        if (fromRow !== toRow && fromCol !== toCol) return false
+
+        // 检查路径是否有障碍
+        return isPathClear(fromRow, fromCol, toRow, toCol)
+      }
+
+      function isValidCannonMove(fromRow, fromCol, toRow, toCol) {
+        // 炮走直线
+        if (fromRow !== toRow && fromCol !== toCol) return false
+
+        const target = board[toRow][toCol]
+        const obstacles = countObstacles(fromRow, fromCol, toRow, toCol)
+
+        if (target === 0) {
+          // 移动时不能有障碍
+          return obstacles === 0
+        } else {
+          // 吃子时必须有一个炮架
+          return obstacles === 1
+        }
+      }
+
+      function isValidPawnMove(fromRow, fromCol, toRow, toCol) {
+        const piece = board[fromRow][fromCol]
+        const isRed = isRedPiece(piece)
+        const rowDiff = toRow - fromRow
+        const colDiff = Math.abs(toCol - fromCol)
+
+        // 兵/卒只能前进
+        if (isRed) {
+          if (rowDiff > 0) return false // 红兵不能后退
+          if (fromRow > 4) {
+            // 未过河，只能前进
+            return rowDiff === -1 && colDiff === 0
+          } else {
+            // 已过河，可以前进或左右移动
+            return (rowDiff === -1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)
+          }
+        } else {
+          if (rowDiff < 0) return false // 黑卒不能后退
+          if (fromRow < 5) {
+            // 未过河，只能前进
+            return rowDiff === 1 && colDiff === 0
+          } else {
+            // 已过河，可以前进或左右移动
+            return (rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)
+          }
+        }
+      }
+
+      function isPathClear(fromRow, fromCol, toRow, toCol) {
+        return countObstacles(fromRow, fromCol, toRow, toCol) === 0
+      }
+
+      function countObstacles(fromRow, fromCol, toRow, toCol) {
+        let count = 0
+
+        if (fromRow === toRow) {
+          // 水平移动
+          const minCol = Math.min(fromCol, toCol)
+          const maxCol = Math.max(fromCol, toCol)
+          for (let col = minCol + 1; col < maxCol; col++) {
+            if (board[fromRow][col] !== 0) count++
+          }
+        } else if (fromCol === toCol) {
+          // 垂直移动
+          const minRow = Math.min(fromRow, toRow)
+          const maxRow = Math.max(fromRow, toRow)
+          for (let row = minRow + 1; row < maxRow; row++) {
+            if (board[row][fromCol] !== 0) count++
+          }
+        }
+
+        return count
+      }
+
+      function makeMove(row, col) {
+        if (!gameStarted || !isValidPosition(row, col)) return
+
+        if (selectedPiece) {
+          // 尝试移动棋子
+          const piece = board[selectedPiece.row][selectedPiece.col]
+          const targetPiece = board[row][col]
+
+          // 检查是否是当前玩家的棋子
+          const isPieceRed = isRedPiece(piece)
+          const isCurrentPlayerRed = currentPlayer === 1
+
+          if (isPieceRed === isCurrentPlayerRed) {
+            // 验证移动是否合法
+            if (isValidMove(selectedPiece.row, selectedPiece.col, row, col)) {
+              // 检查是否将军/将死
+              if (targetPiece === PIECES.R_KING || targetPiece === PIECES.B_KING) {
+                const winnerName = currentPlayer === 1 ? '红方' : '黑方'
+                winnerElement.textContent = `${winnerName}获胜！`
+                winnerElement.style.display = 'inline'
+                gameStarted = false
+              }
+
+              // 执行移动
+              board[row][col] = piece
+              board[selectedPiece.row][selectedPiece.col] = 0
+
+              // 切换玩家
+              currentPlayer = currentPlayer === 1 ? 2 : 1
+              updateCurrentPlayer()
+            }
+          }
+          selectedPiece = null
+        } else {
+          // 选择棋子
+          const piece = board[row][col]
+          if (piece !== 0) {
+            const isPieceRed = isRedPiece(piece)
+            const isCurrentPlayerRed = currentPlayer === 1
+
+            if (isPieceRed === isCurrentPlayerRed) {
+              selectedPiece = { row, col }
+            }
+          }
+        }
+
+        drawBoard()
+      }
+
+      function updateCurrentPlayer() {
+        if (currentPlayer === 1) {
+          currentPlayerElement.textContent = '红方'
+          currentPlayerElement.style.color = '#ff5722'
+        } else {
+          currentPlayerElement.textContent = '黑方'
+          currentPlayerElement.style.color = '#333'
+        }
+      }
+
+      function startGame() {
+        gameStarted = true
+        winnerElement.style.display = 'none'
+        startBtn.textContent = '游戏进行中'
+        startBtn.disabled = true
+      }
+
+      function resetGame() {
+        board = [
+          [12, 11, 10, 9, 8, 9, 10, 11, 12],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 13, 0, 0, 0, 0, 0, 13, 0],
+          [14, 0, 14, 0, 14, 0, 14, 0, 14],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [7, 0, 7, 0, 7, 0, 7, 0, 7],
+          [0, 6, 0, 0, 0, 0, 0, 6, 0],
+          [0, 0, 0, 0, 0, 0, 0, 0, 0],
+          [5, 4, 3, 2, 1, 2, 3, 4, 5],
+        ]
+        currentPlayer = 1
+        gameStarted = false
+        selectedPiece = null
+        winnerElement.style.display = 'none'
+        updateCurrentPlayer()
+        drawBoard()
+        startBtn.textContent = '开始游戏'
+        startBtn.disabled = false
+      }
+
+      // 事件监听器
+      canvas.addEventListener('click', (event) => {
+        const { row, col } = getBoardPosition(event)
+        makeMove(row, col)
+      })
+
+      startBtn.addEventListener('click', startGame)
+      resetBtn.addEventListener('click', resetGame)
+
+      // 初始化
+      drawBoard()
+      updateCurrentPlayer()
+    </script>
+  </body>
+</html>

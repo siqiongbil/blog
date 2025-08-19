@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 - 页面未找到</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+      }
+
+      .not-found-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        max-height: 100vh;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .not-found-content {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 1.5rem 1.2rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        max-width: 900px;
+        width: 100%;
+        max-height: 95vh;
+        overflow-y: auto;
+        box-sizing: border-box;
+      }
+
+      /* 自定义滚动条样式 */
+      .not-found-content::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .not-found-content::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+      }
+
+      .not-found-content::-webkit-scrollbar-thumb {
+        background: rgba(79, 172, 254, 0.6);
+        border-radius: 3px;
+      }
+
+      .not-found-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(79, 172, 254, 0.8);
+      }
+
+      .error-code {
+        font-size: 5.5rem;
+        font-weight: 900;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        margin-bottom: 0.8rem;
+        text-shadow: 0 0 30px rgba(79, 172, 254, 0.5);
+      }
+
+      .error-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+        color: #fff;
+      }
+
+      .error-description {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 1.5rem;
+        line-height: 1.5;
+      }
+
+      .snake-game {
+        margin: 1rem 0;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        flex-shrink: 0;
+        max-height: 400px;
+        overflow: hidden;
+      }
+
+      .game-layout {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 1.5rem;
+        align-items: flex-start;
+        justify-content: center;
+        flex-wrap: nowrap;
+      }
+
+      .game-board {
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-canvas {
+        max-height: 280px;
+        width: auto;
+      }
+
+      .game-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 200px;
+        flex-shrink: 0;
+        flex-basis: auto;
+      }
+
+      .game-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.8rem;
+        font-size: 1rem;
+      }
+
+      .score {
+        color: #4facfe;
+        font-weight: 600;
+      }
+
+      .game-over {
+        color: #ff6b6b;
+        font-weight: 600;
+      }
+
+      .game-canvas {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        margin: 0 auto;
+        display: block;
+      }
+
+      .game-controls {
+        margin: 0.8rem 0;
+      }
+
+      .game-instructions {
+        margin-top: 0.8rem;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .game-instructions p {
+        margin: 0.3rem 0;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        margin: 0 8px 8px 0;
+        text-decoration: none;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        background: transparent;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        border: none;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+      }
+
+      .btn-secondary {
+        background: transparent;
+        color: #4facfe;
+        border: 2px solid #4facfe;
+      }
+
+      .btn-secondary:hover {
+        background: #4facfe;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .btn-game {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        margin: 0 5px;
+      }
+
+      .btn-game:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+      }
+
+      .error-actions {
+        margin-top: 1rem;
+      }
+
+      @media (max-width: 768px) {
+        .error-code {
+          font-size: 4rem;
+        }
+
+        .error-title {
+          font-size: 1.3rem;
+        }
+
+        .not-found-content {
+          padding: 1.5rem 1rem;
+          max-height: 95vh;
+        }
+
+        .btn {
+          display: block;
+          margin: 8px 0;
+          width: 100%;
+          padding: 10px 20px;
+          font-size: 0.9rem;
+        }
+
+        .game-canvas {
+          width: 100%;
+          max-width: 280px;
+          height: auto;
+        }
+
+        .snake-game {
+          margin: 1rem 0;
+          padding: 0.8rem;
+        }
+      }
+
+      @media (max-height: 700px) {
+        .error-code {
+          font-size: 4rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-title {
+          font-size: 1.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .error-description {
+          font-size: 0.9rem;
+          margin-bottom: 1rem;
+        }
+
+        .snake-game {
+          margin: 1rem 0;
+          padding: 0.8rem;
+        }
+
+        .game-canvas {
+          width: 350px;
+          height: 200px;
+        }
+
+        .not-found-content {
+          padding: 1.5rem 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="not-found-container">
+      <div class="not-found-content">
+        <div class="error-code">404</div>
+        <h1 class="error-title">页面未找到</h1>
+        <p class="error-description">
+          抱歉，您访问的页面不存在。不过，来玩个贪吃蛇游戏放松一下吧！
+        </p>
+
+        <div class="snake-game">
+          <div class="game-layout">
+            <div class="game-board">
+              <canvas id="gameCanvas" class="game-canvas" width="400" height="280"></canvas>
+            </div>
+
+            <div class="game-sidebar">
+              <div class="game-info">
+                <span class="score">得分: <span id="score">0</span></span>
+                <span id="game-over" class="game-over" style="display: none">游戏结束</span>
+              </div>
+
+              <div class="game-controls">
+                <button id="startBtn" class="btn btn-game">开始游戏</button>
+                <button id="pauseBtn" class="btn btn-game" style="display: none">暂停</button>
+              </div>
+
+              <div class="game-instructions">
+                <p>使用方向键控制贪吃蛇移动</p>
+                <p>按空格键暂停/继续游戏</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="error-actions">
+          <a href="/" class="btn btn-primary">返回首页</a>
+          <a href="javascript:history.back()" class="btn btn-secondary">返回上页</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 贪吃蛇游戏逻辑
+      const canvas = document.getElementById('gameCanvas')
+      const ctx = canvas.getContext('2d')
+      const scoreElement = document.getElementById('score')
+      const gameOverElement = document.getElementById('game-over')
+      const startBtn = document.getElementById('startBtn')
+      const pauseBtn = document.getElementById('pauseBtn')
+
+      const GRID_SIZE = 20
+      const CANVAS_WIDTH = 400
+      const CANVAS_HEIGHT = 280
+
+      let snake = [{ x: 10, y: 10 }]
+      let food = { x: 15, y: 15 }
+      let direction = { x: 0, y: 0 }
+      let score = 0
+      let gameRunning = false
+      let gameOver = false
+      let gameInterval = null
+
+      function generateFood() {
+        food = {
+          x: Math.floor(Math.random() * (CANVAS_WIDTH / GRID_SIZE)),
+          y: Math.floor(Math.random() * (CANVAS_HEIGHT / GRID_SIZE)),
+        }
+      }
+
+      function draw() {
+        // 清空画布
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
+        ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+
+        // 绘制蛇
+        snake.forEach((segment, index) => {
+          if (index === 0) {
+            ctx.fillStyle = '#4CAF50'
+          } else {
+            ctx.fillStyle = '#81C784'
+          }
+          ctx.fillRect(
+            segment.x * GRID_SIZE + 1,
+            segment.y * GRID_SIZE + 1,
+            GRID_SIZE - 2,
+            GRID_SIZE - 2,
+          )
+        })
+
+        // 绘制食物
+        ctx.fillStyle = '#FF5722'
+        ctx.fillRect(food.x * GRID_SIZE + 1, food.y * GRID_SIZE + 1, GRID_SIZE - 2, GRID_SIZE - 2)
+      }
+
+      function update() {
+        if (!gameRunning || (direction.x === 0 && direction.y === 0)) return
+
+        const head = { ...snake[0] }
+        head.x += direction.x
+        head.y += direction.y
+
+        // 检查边界碰撞
+        if (
+          head.x < 0 ||
+          head.x >= CANVAS_WIDTH / GRID_SIZE ||
+          head.y < 0 ||
+          head.y >= CANVAS_HEIGHT / GRID_SIZE
+        ) {
+          gameOver = true
+          gameRunning = false
+          gameOverElement.style.display = 'inline'
+          startBtn.textContent = '重新开始'
+          startBtn.style.display = 'inline-block'
+          pauseBtn.style.display = 'none'
+          return
+        }
+
+        // 检查自身碰撞
+        if (snake.some((segment) => segment.x === head.x && segment.y === head.y)) {
+          gameOver = true
+          gameRunning = false
+          gameOverElement.style.display = 'inline'
+          startBtn.textContent = '重新开始'
+          startBtn.style.display = 'inline-block'
+          pauseBtn.style.display = 'none'
+          return
+        }
+
+        snake.unshift(head)
+
+        // 检查是否吃到食物
+        if (head.x === food.x && head.y === food.y) {
+          score += 10
+          scoreElement.textContent = score
+          generateFood()
+        } else {
+          snake.pop()
+        }
+      }
+
+      function gameLoop() {
+        update()
+        draw()
+      }
+
+      function startGame() {
+        snake = [{ x: 10, y: 10 }]
+        direction = { x: 0, y: 0 }
+        score = 0
+        scoreElement.textContent = score
+        gameOver = false
+        gameRunning = true
+        gameOverElement.style.display = 'none'
+        generateFood()
+
+        if (gameInterval) clearInterval(gameInterval)
+        gameInterval = setInterval(gameLoop, 150)
+
+        startBtn.style.display = 'none'
+        pauseBtn.style.display = 'inline-block'
+        pauseBtn.textContent = '暂停'
+      }
+
+      function toggleGame() {
+        if (gameOver) {
+          startGame()
+          return
+        }
+
+        gameRunning = !gameRunning
+        if (gameRunning) {
+          if (!gameInterval) {
+            gameInterval = setInterval(gameLoop, 150)
+          }
+          pauseBtn.textContent = '暂停'
+        } else {
+          if (gameInterval) {
+            clearInterval(gameInterval)
+            gameInterval = null
+          }
+          pauseBtn.textContent = '继续'
+        }
+      }
+
+      function handleKeyPress(event) {
+        if (!gameRunning && !gameOver) return
+
+        switch (event.key) {
+          case 'ArrowUp':
+            if (direction.y !== 1) direction = { x: 0, y: -1 }
+            break
+          case 'ArrowDown':
+            if (direction.y !== -1) direction = { x: 0, y: 1 }
+            break
+          case 'ArrowLeft':
+            if (direction.x !== 1) direction = { x: -1, y: 0 }
+            break
+          case 'ArrowRight':
+            if (direction.x !== -1) direction = { x: 1, y: 0 }
+            break
+          case ' ':
+            event.preventDefault()
+            if (startBtn.style.display === 'none') {
+              toggleGame()
+            }
+            break
+        }
+      }
+
+      // 事件监听器
+      startBtn.addEventListener('click', startGame)
+      pauseBtn.addEventListener('click', toggleGame)
+      document.addEventListener('keydown', handleKeyPress)
+
+      // 初始化
+      draw()
+    </script>
+  </body>
+</html>

@@ -1,0 +1,339 @@
+# 依赖文件
+node_modules/
+*/node_modules/
+**/node_modules/
+yarn.lock
+package-lock.json
+.pnpm-lock.yaml
+
+# 构建输出
+dist/
+build/
+out/
+*/dist/
+*/build/
+*/out/
+**/dist/
+**/build/
+**/out/
+
+# Vue/Vite 构建产物
+.vite/
+.nuxt/
+.output/
+.vercel/
+.netlify/
+
+# React/Next.js
+.next/
+static/
+
+# TypeScript
+*.tsbuildinfo
+.tsbuildinfo
+
+# 环境变量文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*/.env
+*/.env.local
+*/.env.development.local
+*/.env.test.local
+*/.env.production.local
+
+# 日志文件
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# 运行时数据
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# 覆盖率目录
+coverage/
+*.lcov
+.nyc_output/
+
+# 缓存目录
+.cache/
+.parcel-cache/
+.vite/
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# 测试覆盖率
+.nyc_output/
+coverage/
+*.lcov
+
+# Jest
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# IDE和编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# 临时文件
+*.tmp
+*.temp
+
+# 上传文件目录
+app/files/
+app/image/
+app/music/
+app/uploads/
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+
+# Flutter相关
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+pubspec.lock
+
+# Flutter 构建产物
+**/build/
+**/android/app/debug
+**/android/app/profile
+**/android/app/release
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/Runner/GeneratedPluginRegistrant.*
+**/macos/Flutter/GeneratedPluginRegistrant.swift
+**/linux/flutter/generated_plugin_registrant.cc
+**/windows/flutter/generated_plugin_registrant.cc
+
+# Flutter Web
+**/web/flutter_service_worker.js
+**/web/version.json
+**/web/assets/AssetManifest.json
+**/web/assets/FontManifest.json
+
+# Docker相关
+.dockerignore
+docker-compose.override.yml
+docker-compose.*.yml
+.docker/
+Dockerfile.dev
+Dockerfile.prod
+
+# 容器数据
+volumes/
+data/
+mysql_data/
+redis_data/
+nginx_logs/
+
+# 备份文件
+*.bak
+*.backup
+*.old
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# 配置文件中的敏感信息
+config/local.js
+config/production.js
+config/secrets.js
+config/database.js
+config/redis.js
+
+# API 密钥和令牌
+*.key
+*.pem
+*.p12
+*.pfx
+api-keys.json
+secrets.json
+credentials.json
+service-account.json
+
+# 数据库配置
+db.config.js
+database.config.js
+.sequelizerc
+
+# SSL证书和安全文件
+*.pem
+*.key
+*.crt
+*.cert
+*.ca-bundle
+*.p7b
+*.p7c
+*.pfx
+*.p12
+*.jks
+*.keystore
+*.truststore
+
+# SSH 密钥
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+known_hosts
+
+# Nginx 配置文件
+nginx.conf
+
+# 示例文件
+.smples
+
+# 测试文件
+test-results/
+playwright-report/
+test-results.xml
+
+# 本地开发文件
+.local
+*.local
+
+# 编译文件
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# 包文件
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# 虚拟环境
+venv/
+env/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# 预渲染服务器
+prerender-server/.env
+prerender-server/logs/
+prerender-server/cache/
+
+# 服务器配置
+server.config
+nginx/
+*.nginx
+*.conf
+
+# 监控和分析
+.sentry/
+*.sentry
+analytics/
+metrics/
+
+# 其他
+.sass-cache/
+.connect.lock
+.coverage
+.grunt
+.lock-wscript
+.node_repl_history
+.npm
+.yarn-integrity
+.yarn-error.log
+.pnp.*
+.pnp.js
+
+# 编辑器和 IDE 扩展
+.history/
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+*.code-workspace
+
+# 系统和临时文件
+*.swp
+*.swo
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# 性能分析
+*.cpuprofile
+*.heapprofile
+*.heapsnapshot
+
+# 部署相关
+deploy.log
+deployment/
+.deployment
+
+# 备份和归档
+*.backup
+*.bak
+*.old
+*.orig
+*.save
+*.swp
+*.tmp
+
+# 文档生成
+docs/build/
+site/
+_site/
+
+# 国际化
+locale/
+i18n/build/
+
+# 移动端特定
+*.mobileprovision
+*.dSYM/
+*.ipa
+*.apk
+*.aab

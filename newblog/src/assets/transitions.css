@@ -1,0 +1,167 @@
+/* 页面切换过渡动画 */
+
+/* 基础过渡动画 */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* 滑动过渡动画 */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* 淡入淡出动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* 缩放动画 */
+.scale-enter-active,
+.scale-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scale-enter-from {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+/* 列表过渡动画 */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.list-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.list-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+/* 列表项过渡动画 */
+.list-move {
+  transition: transform 0.3s ease;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .page-enter-active,
+  .page-leave-active,
+  .slide-enter-active,
+  .slide-leave-active,
+  .scale-enter-active,
+  .scale-leave-active {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .page-enter-from,
+  .slide-enter-from {
+    transform: translateY(15px);
+  }
+
+  .page-leave-to,
+  .slide-leave-to {
+    transform: translateY(-15px);
+  }
+
+  .scale-enter-from {
+    transform: scale(0.98);
+  }
+
+  .scale-leave-to {
+    transform: scale(1.02);
+  }
+}
+
+/* 高性能动画设置 */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-leave-active,
+  .slide-enter-active,
+  .slide-leave-active,
+  .fade-enter-active,
+  .fade-leave-active,
+  .scale-enter-active,
+  .scale-leave-active,
+  .list-enter-active,
+  .list-leave-active,
+  .list-move {
+    transition: none;
+  }
+
+  .page-enter-from,
+  .page-leave-to,
+  .slide-enter-from,
+  .slide-leave-to,
+  .fade-enter-from,
+  .fade-leave-to,
+  .scale-enter-from,
+  .scale-leave-to,
+  .list-enter-from,
+  .list-leave-to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 硬件加速优化 */
+.page-enter-active,
+.page-leave-active,
+.slide-enter-active,
+.slide-leave-active,
+.scale-enter-active,
+.scale-leave-active {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* 防止动画期间的布局抖动 */
+.page-enter-active,
+.page-leave-active,
+.slide-enter-active,
+.slide-leave-active,
+.scale-enter-active,
+.scale-leave-active,
+.fade-enter-active,
+.fade-leave-active {
+  contain: layout style paint;
+}

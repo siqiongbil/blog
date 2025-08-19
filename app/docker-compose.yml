@@ -1,0 +1,112 @@
+services:
+  # MySQL数据库服务
+  mysql:
+    image: mysql:8.0
+    container_name: blog_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      TZ: Asia/Shanghai
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/blog.sql:/docker-entrypoint-initdb.d/blog.sql:ro
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_PASSWORD}"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  # Node.js应用服务
+  blog_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blog_app
+    restart: unless-stopped
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: ${PORT}
+      # 数据库连接配置
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      # JWT配置
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      # 文件上传配置
+      UPLOAD_PATH: ${UPLOAD_PATH:-./uploads}
+      MAX_FILE_SIZE: ${MAX_FILE_SIZE:-10485760}
+      # 音乐文件配置
+      MUSIC_DIR: ${MUSIC_DIR:-./music}
+      MUSIC_EXTENSIONS: ${MUSIC_EXTENSIONS:-.mp3,.wav,.flac,.m4a,.aac}
+      # 博客基础配置
+      SITE_NAME: ${SITE_NAME:-我的个人博客}
+      SITE_DESCRIPTION: ${SITE_DESCRIPTION:-记录生活，分享技术}
+      SITE_KEYWORDS: ${SITE_KEYWORDS:-博客,技术,生活,分享}
+      SITE_AUTHOR: ${SITE_AUTHOR:-博主姓名}
+      SITE_URL: ${SITE_URL:-http://localhost:9000}
+      # 邮件配置
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASS: ${MAIL_PASS}
+      MAIL_FROM: ${MAIL_FROM}
+      # 管理员账户配置
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-yourusername}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-yourpassword}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-youremail@example.com}
+      ADMIN_NICKNAME: ${ADMIN_NICKNAME:-管理员}
+      # 其他配置
+      BCRYPT_ROUNDS: ${BCRYPT_ROUNDS:-12}
+      SESSION_SECRET: ${SESSION_SECRET}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:3000}
+      TZ: Asia/Shanghai
+    ports:
+      - "${PORT:-9000}:${PORT:-9000}"
+    volumes:
+      # 映射音乐文件目录
+      - ${MUSIC_DIR:-./music}:/app/music
+      # 映射图片文件目录
+      - ./image:/app/image
+      # 映射文件目录
+      - ./files:/app/files
+      # 创建上传目录
+      - ${UPLOAD_PATH:-./uploads}:/app/uploads
+      # 日志目录
+      - ./logs:/app/logs
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT:-9000}/api/health"] 
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+
+  # 数据库管理工具（开发时使用）
+  adminer:
+    image: adminer:latest
+    container_name: blog_adminer
+    restart: unless-stopped
+    environment:
+      ADMINER_DEFAULT_SERVER: mysql
+      ADMINER_DESIGN: pepa-linha
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    profiles:
+      - tools
+
+volumes:
+  mysql_data:
+    driver: local 

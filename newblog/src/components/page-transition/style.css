@@ -1,0 +1,63 @@
+/* 页面切换过渡样式 */
+.page-content {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  /* 防止内容抖动 */
+  contain: layout style paint;
+}
+
+/* 页面切换动画 */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* 确保页面内容稳定 */
+.page-content > * {
+  width: 100%;
+  /* 防止子元素抖动 */
+  contain: layout style;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+  .page-enter-active,
+  .page-leave-active {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .page-enter-from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  .page-leave-to {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+}
+
+/* 高性能动画 */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter-active,
+  .page-leave-active {
+    transition: none;
+  }
+
+  .page-enter-from,
+  .page-leave-to {
+    opacity: 1;
+    transform: none;
+  }
+}

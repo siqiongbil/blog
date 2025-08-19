@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# 允许搜索引擎访问的路径
+Allow: /posts
+Allow: /article
+Allow: /static/
+Allow: /assets/
+
+# 禁止访问的路径
+Disallow: /api/
+Disallow: /playground
+Disallow: /echarts-demo
+Disallow: /three-demo
+Disallow: /*.json
+
+# 允许访问错误页面（搜索引擎需要能访问这些页面）
+Allow: /404.html
+Allow: /500.html
+Allow: /502.html
+Allow: /503.html
+Allow: /504.html
+
+# 网站地图位置
+Sitemap: https://siqiongbiluo.love/sitemap.xml
+
+# 爬取延迟（可选）
+Crawl-delay: 1 
