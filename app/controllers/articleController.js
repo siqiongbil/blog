@@ -180,7 +180,7 @@ class ArticleController {
       // 增加浏览次数并记录访问（只有在状态为已发布时）
       if (article.status === 1) {
         // 检查是否需要跳过访问记录
-        const shouldSkipTracking = this.shouldSkipVisitTracking(req);
+        const shouldSkipTracking = ArticleController.shouldSkipVisitTracking(req);
         
         if (!shouldSkipTracking) {
           // 记录详细访问信息
